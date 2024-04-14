@@ -1,21 +1,28 @@
-import 'dart:core';
+import 'weather_data_model.dart';
 
 class WeatherModel {
-  String cityName;
-  double temp;
-  String condition;
+  final List<Weather> weather;
+  final Main main;
+  final Wind wind;
+  final String name;
 
   WeatherModel({
-    required this.cityName,
-    required this.temp,
-    required this.condition,
+    required this.weather,
+    required this.main,
+    required this.wind,
+    required this.name,
   });
 
-  static WeatherModel fromMap(Map<String, dynamic> map) {
+  factory WeatherModel.fromJson(Map<String, dynamic> json) {
     return WeatherModel(
-      cityName: map['name'] ?? "",
-      temp: map['main']['temp'] ?? 0.0,
-      condition: map['weather'][0]['main'] ?? "",
+      weather: (json['weather'] as List).map((item) => Weather.fromJson(item)).toList(),
+      main: Main.fromJson(json['main']),
+      wind: Wind.fromJson(json['wind']),
+      name: json['name'] ?? "",
     );
   }
 }
+
+
+
+

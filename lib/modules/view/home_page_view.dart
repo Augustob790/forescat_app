@@ -1,7 +1,10 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import '../../core/const/image_constant.dart';
+import '../../core/widgets/custom_container.dart';
 import '../../core/widgets/custom_text.dart';
 import '../../core/widgets/get_error_ui.dart';
 import '../../core/widgets/load_ui.dart';
@@ -42,7 +45,7 @@ class _HomePageViewState extends State<HomePageView> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: CustomText(
-          text: weatherStore.weather?.cityName ?? "",
+          text: weatherStore.weather?.name ?? "",
           color: Colors.white,
           fontSize: 18,
           height: 0.10,
@@ -72,6 +75,7 @@ class _HomePageViewState extends State<HomePageView> {
 
   Widget getBodyUI() {
     return Container(
+      padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         gradient: LinearGradient(
             begin: const Alignment(0.5, 0),
@@ -105,7 +109,8 @@ class _HomePageViewState extends State<HomePageView> {
             margin: const EdgeInsets.symmetric(vertical: 1, horizontal: 20),
             padding: const EdgeInsets.all(10),
             child: CustomImageView(
-              imagePath: Helpers.imageClima("Sol"),
+              imagePath: Helpers.imageClima(
+                  weatherStore.weather?.weather.first.main ?? "Clear"),
               height: 122,
               width: 130,
             ),
@@ -114,7 +119,7 @@ class _HomePageViewState extends State<HomePageView> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                weatherStore.weather?.temp.toStringAsFixed(1) ?? "",
+                weatherStore.weather?.main.temp.toStringAsFixed(1) ?? "",
                 style: theme.textTheme.displayLarge,
               ),
               Padding(
@@ -140,99 +145,50 @@ class _HomePageViewState extends State<HomePageView> {
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 20),
-          // const Row(
-          //   children: [
-          //     Padding(
-          //       padding: EdgeInsets.only(left: 15),
-          //       child: SizedBox(
-          //         width: 34,
-          //         child: Text(
-          //           'Hoje',
-          //           style: TextStyle(
-          //             color: Color(0xFFDEDDDD),
-          //             fontSize: 12,
-          //             fontFamily: 'Poppins',
-          //             fontWeight: FontWeight.w600,
-          //             height: 0.12,
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //   ],
-          // ),
           const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // InkWell(
-              //   onTap: () => {},
-              //   child: Padding(
-              //     padding: const EdgeInsets.all(7.0),
-              //     child: CustomContainer(
-              //       horario: "Manhã",
-              //       image: Helpers.imageClima("sol"),
-              //       grau: "graus",
-              //     ),
-              //   ),
-              // ),
-              // InkWell(
-              //   onTap: () => {},
-              //   child: Padding(
-              //     padding: const EdgeInsets.all(7.0),
-              //     child: CustomContainer(
-              //       horario: "Tarde",
-              //       image: Helpers.imageClima(provider.tarde.first.tempo ?? ''),
-              //       grau: provider.tarde.first.graus,
-              //     ),
-              //   ),
-              // ),
-              // InkWell(
-              //   onTap: () => {},
-              //   child: Padding(
-              //     padding: const EdgeInsets.all(7.0),
-              //     child: CustomContainer(
-              //       horario: "Noite",
-              //       image: Helpers.imageClima(provider.noite.first.tempo ?? ''),
-              //       grau: provider.noite.first.graus,
-              //     ),
-              //   ),
-              // ),
-            ],
-          ),
-          const SizedBox(
-            height: 30,
-          ),
-          // ignore: prefer_const_constructors
-          Row(
-            children: const [
               Padding(
-                padding: EdgeInsets.only(left: 15),
-                child: Text(
-                  'Estados',
-                  style: TextStyle(
-                    color: Color(0xFFDEDDDD),
-                    fontSize: 12,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
-                    height: 0.12,
-                  ),
+                padding: EdgeInsets.all(20.0),
+                child: CustomText(
+                  text: "Infos",
+                  fontSize: 20,
+                  height: 0.12,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ],
           ),
-          // Expanded(
-          //   child: Consumer<DetailsScreenController>(
-          //     builder: (context, info, child) => ListView.builder(
-          //         scrollDirection: Axis.horizontal,
-          //         itemCount: info.states.length,
-          //         itemBuilder: (context, index) => CustomListView(
-          //               image: info.weather,
-          //               estado: info.states[index].estado,
-          //               graus: info.grausState,
-          //             )),
-          //   ),
-          // ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CustomContainer(
+                text: "Min",
+                info: "${weatherStore.weather?.main.tempMin.toString()}˚",
+              ),
+              CustomContainer(
+                text: "Max",
+                info: "${weatherStore.weather?.main.tempMax.toString()}˚",
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CustomContainer(
+                text: "Humidity",
+                info: "${weatherStore.weather?.main.humidity.toString()}%",
+              ),
+              CustomContainer(
+                text: "Wind",
+                info: "${weatherStore.weather?.wind.speed.toString()} Km/h",
+              ),
+            ],
+          ),
         ],
       ),
     );

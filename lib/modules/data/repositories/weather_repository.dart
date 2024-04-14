@@ -18,7 +18,7 @@ class WeatherRepositoryImpl implements WeatherRepository {
     String url = "?q=$cityName&appid=$apiKey&units=metric";
     try {
       final response = await dio.get(url);
-      return WeatherModel.fromMap(response.data);
+      return WeatherModel.fromJson(response.data);
     } on DioException catch (e) {
       if (e.type == DioExceptionType.connectionTimeout ||
           e.type == DioExceptionType.receiveTimeout) {
