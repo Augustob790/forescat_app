@@ -1,9 +1,9 @@
 import 'package:forecast_app/modules/domain/usecases/get_current_city_use_cases.dart';
 
-import '../domain/usecases/get_all_use_cases.dart';
+import '../domain/usecases/get_city_use_cases.dart';
 
 class HomePageViewModel {
-  final GetAllWeatherUsecaseImpl getAllWeatherUsecase;
+  final GetCityWeatherUsecaseImpl getAllWeatherUsecase;
   final GetAllCurrentCityUsecaseImpl getAllCurrentCityUsecase;
 
   HomePageViewModel({

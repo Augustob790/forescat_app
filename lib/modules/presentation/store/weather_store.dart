@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:forecast_app/modules/data/repositories/weather_repository.dart';
 import 'package:mobx/mobx.dart';
+import '../../domain/model/weather_forecast_model.dart';
 import '../../domain/model/weather_model.dart';
 
 part 'weather_store.g.dart';
@@ -15,6 +16,10 @@ abstract class _WeatherStoreBase with Store {
   final api = Modular.get<WeatherRepository>();
 
   String city = "";
+  List<WeatherData> firstWeatherMap = [];
+
+  @observable
+  WeatherForecast? forecast;
 
   @observable
   WeatherModel? weather;
@@ -29,10 +34,22 @@ abstract class _WeatherStoreBase with Store {
   dynamic isLoading;
 
   @action
-  Future<WeatherModel> getAllWeather(String cityName) async {
-    isLoading = "isLoading";
+  Future<WeatherForecast> getAllWeather(String cityName) async {
     try {
       final response = await api.getAllWeather(cityName);
+      forecast = response;
+
+      return forecast!;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  @action
+  Future<WeatherModel> getCityWeather(String cityName) async {
+    isLoading = "isLoading";
+    try {
+      final response = await api.getCityWeather(cityName);
       isLoading = "sucess";
       weather = response;
       return weather!;

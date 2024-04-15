@@ -2,19 +2,19 @@ import '../../data/repositories/weather_repository.dart';
 import '../exception/weather_exception.dart';
 import '../model/weather_model.dart';
 
-abstract class GetAllWeatherUsecase {
+abstract class GetCityWeatherUsecase {
   Future<WeatherModel> call(String cityname);
 }
 
-class GetAllWeatherUsecaseImpl implements GetAllWeatherUsecase {
+class GetCityWeatherUsecaseImpl implements GetCityWeatherUsecase {
   final WeatherRepository repository;
 
-  GetAllWeatherUsecaseImpl({required this.repository});
+  GetCityWeatherUsecaseImpl({required this.repository});
 
   @override
   Future<WeatherModel> call(cityName) async {
     try {
-      return repository.getAllWeather(cityName);
+      return repository.getCityWeather(cityName);
     } on WeatherException {
       rethrow;
     }

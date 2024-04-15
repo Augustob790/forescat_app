@@ -45,7 +45,7 @@ class Weather {
 }
 
 class Wind {
-  final double speed;
+  final dynamic speed;
 
   Wind({required this.speed});
 

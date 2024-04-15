@@ -9,7 +9,7 @@ class WeatherForecast {
 
   factory WeatherForecast.fromJson(Map<String, dynamic> json) {
     return WeatherForecast(
-      list: (json['list'] as List).map((item) => WeatherData.fromJson(item)).toList(),
+      list: json["list"] != null ? (json['list'] as List).map((item) => WeatherData.fromJson(item)).toList() : [],
     );
   }
 }
@@ -17,18 +17,19 @@ class WeatherForecast {
 class WeatherData {
   final Main main;
   final List<Weather> weather;
+  final String date;
 
   WeatherData({
     required this.main,
     required this.weather,
+    required this.date,
   });
 
   factory WeatherData.fromJson(Map<String, dynamic> json) {
     return WeatherData(
+      date: json['dt_txt'] ?? "",
       main: Main.fromJson(json['main']),
-      weather: (json['weather'] as List).map((item) => Weather.fromJson(item)).toList(),
+      weather:json['weather'] != null ? (json['weather'] as List).map((item) => Weather.fromJson(item)).toList() : [],
     );
   }
 }
-
-

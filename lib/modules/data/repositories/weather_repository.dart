@@ -3,19 +3,42 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import '../../../core/const/api.dart';
+import '../../domain/model/weather_forecast_model.dart';
 import '../../domain/model/weather_model.dart';
 
 abstract class WeatherRepository {
-  Future<WeatherModel> getAllWeather(String cityName);
+  Future<WeatherModel> getCityWeather(String cityName);
+  Future<WeatherForecast> getAllWeather(String cityName);
   Future<String> getCity();
 }
 
 class WeatherRepositoryImpl implements WeatherRepository {
   late Dio dio = Apis.dio;
   static String apiKey = dotenv.get('apiKey');
+
   @override
-  Future<WeatherModel> getAllWeather(String cityName) async {
-    String url = "?q=$cityName&appid=$apiKey&units=metric";
+  Future<WeatherForecast> getAllWeather(String cityName) async {
+    String url = "forecast?q=$cityName&appid=$apiKey&units=metric&cnt=39";
+    try {
+      final response = await dio.get(url);
+      return WeatherForecast.fromJson(response.data);
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout) {
+        throw "Por favor, verifique sua conexão e tente novamente.";
+      } else if (e.type == DioExceptionType.connectionError) {
+        throw "Erro de conexão: $e";
+      } else {
+        throw e.toString();
+      }
+    } catch (e) {
+      throw Exception("Error get all weather: $e");
+    }
+  }
+
+  @override
+  Future<WeatherModel> getCityWeather(String cityName) async {
+    String url = "weather?q=$cityName&appid=$apiKey&units=metric";
     try {
       final response = await dio.get(url);
       return WeatherModel.fromJson(response.data);

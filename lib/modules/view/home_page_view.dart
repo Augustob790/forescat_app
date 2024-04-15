@@ -33,6 +33,7 @@ class _HomePageViewState extends State<HomePageView> {
 
   inicialize() async {
     await weatherStore.getCurrentCity();
+    await weatherStore.getCityWeather(weatherStore.city);
     await weatherStore.getAllWeather(weatherStore.city);
   }
 
@@ -55,7 +56,6 @@ class _HomePageViewState extends State<HomePageView> {
       ),
       body: Center(
         child: Observer(
-          name: "inital",
           builder: (context) {
             if (weatherStore.isLoading == "isLoading") {
               return const LoadUi();
@@ -65,7 +65,7 @@ class _HomePageViewState extends State<HomePageView> {
                 weatherStore.isLoading == "sucess") {
               return getBodyUI();
             } else {
-              return const GetErrorUi(error: "Error");
+              return const LoadUi();
             }
           },
         ),
@@ -162,9 +162,14 @@ class _HomePageViewState extends State<HomePageView> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CustomContainer(
-                text: "Min",
-                info: "${weatherStore.weather?.main.tempMin.toString()}˚",
+              InkWell(
+                onTap: () {
+                  Modular.to.pushNamed("/five_days");
+                },
+                child: CustomContainer(
+                  text: "Min",
+                  info: "${weatherStore.weather?.main.tempMin.toString()}˚",
+                ),
               ),
               CustomContainer(
                 text: "Max",

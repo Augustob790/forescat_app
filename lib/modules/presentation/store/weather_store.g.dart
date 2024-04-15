@@ -9,7 +9,20 @@ part of 'weather_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$WeatherStore on _WeatherStoreBase, Store {
+  final _$forecastAtom = Atom(name: '_WeatherStoreBase.forecast');
 
+  @override
+  WeatherForecast? get forecast {
+    _$forecastAtom.reportRead();
+    return super.forecast;
+  }
+
+  @override
+  set forecast(WeatherForecast? value) {
+    _$forecastAtom.reportWrite(value, super.forecast, () {
+      super.forecast = value;
+    });
+  }
 
   final _$weatherAtom = Atom(name: '_WeatherStoreBase.weather');
 
@@ -41,12 +54,19 @@ mixin _$WeatherStore on _WeatherStoreBase, Store {
     });
   }
 
-  final _$getAllWeatherAction =
-      AsyncAction('_WeatherStoreBase.getAllWeather');
+  final _$getAllWeatherAction = AsyncAction('_WeatherStoreBase.getAllWeather');
 
   @override
-  Future<WeatherModel> getAllWeather(String name) {
-    return _$getAllWeatherAction.run(() => super.getAllWeather(name));
+  Future<WeatherForecast> getAllWeather(String cityName) {
+    return _$getAllWeatherAction.run(() => super.getAllWeather(cityName));
+  }
+
+  final _$getCityWeatherAction =
+      AsyncAction('_WeatherStoreBase.getCityWeather');
+
+  @override
+  Future<WeatherModel> getCityWeather(String name) {
+    return _$getCityWeatherAction.run(() => super.getCityWeather(name));
   }
 
   final _$getCurrentCity = AsyncAction('_WeatherStoreBase.getCurrentCity');
@@ -85,7 +105,6 @@ mixin _$WeatherStore on _WeatherStoreBase, Store {
       super.isLoading = value;
     });
   }
-
 
   @override
   String toString() {

@@ -1,4 +1,5 @@
 import '../const/image_constant.dart';
+import 'package:intl/intl.dart';
 
 class Helpers {
   static DateTime data = DateTime.now();
@@ -99,6 +100,12 @@ class Helpers {
       default:
         return "";
     }
+  }
+
+  static String convertToWeekday(String dtTxt) {
+    DateTime dateTime = DateTime.parse(dtTxt);
+    String weekday = DateFormat.EEEE().format(dateTime);
+    return weekday;
   }
 
   static String imageClima(String clima) {
