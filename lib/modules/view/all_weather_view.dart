@@ -27,7 +27,7 @@ class _AllWeatherViewState extends State<AllWeatherView> {
   void initState() {
     super.initState();
     weatherStore = Modular.get<WeatherStore>();
-    //inicialize();
+    inicialize();
   }
 
   inicialize() async {
