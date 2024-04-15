@@ -1,12 +1,11 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'dart:developer';
-
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:forecast_app/modules/data/repositories/weather_repository.dart';
 import 'package:mobx/mobx.dart';
 import '../../domain/model/weather_forecast_model.dart';
-import '../../domain/model/weather_model.dart';
+
 
 part 'weather_store.g.dart';
 
@@ -16,13 +15,12 @@ abstract class _WeatherStoreBase with Store {
   final api = Modular.get<WeatherRepository>();
 
   String city = "";
-  List<WeatherData> firstWeatherMap = [];
-
+  
   @observable
   WeatherForecast? forecast;
 
   @observable
-  WeatherModel? weather;
+  WeatherForecast? weather;
 
   @observable
   String? cityName;
@@ -35,18 +33,20 @@ abstract class _WeatherStoreBase with Store {
 
   @action
   Future<WeatherForecast> getAllWeather(String cityName) async {
+    isLoading = "isLoading";
     try {
       final response = await api.getAllWeather(cityName);
       forecast = response;
-
+      isLoading = "sucess";
       return forecast!;
     } catch (e) {
+      isLoading = "error";
       throw e.toString();
     }
   }
 
   @action
-  Future<WeatherModel> getCityWeather(String cityName) async {
+  Future<WeatherForecast> getCityWeather(String cityName) async {
     isLoading = "isLoading";
     try {
       final response = await api.getCityWeather(cityName);

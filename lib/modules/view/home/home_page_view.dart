@@ -3,15 +3,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import '../../core/const/image_constant.dart';
-import '../../core/widgets/custom_container.dart';
-import '../../core/widgets/custom_text.dart';
-import '../../core/widgets/get_error_ui.dart';
-import '../../core/widgets/load_ui.dart';
-import '../presentation/store/weather_store.dart';
-import '../../core/widgets/custom_image_view.dart';
-import '../../core/helpers/helpers.dart';
-import '../../core/helpers/theme_helper.dart';
+import '../../../core/const/image_constant.dart';
+import 'widget/custom_container.dart';
+import '../../../core/widgets/custom_text.dart';
+import '../../../core/widgets/get_error_ui.dart';
+import '../../../core/widgets/load_ui.dart';
+import '../../presentation/store/weather_store.dart';
+import '../../../core/widgets/custom_image_view.dart';
+import '../../../core/helpers/helpers.dart';
+import '../../../core/helpers/theme_helper.dart';
 
 class HomePageView extends StatefulWidget {
   const HomePageView({super.key});
@@ -45,13 +45,31 @@ class _HomePageViewState extends State<HomePageView> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: CustomText(
-          text: weatherStore.weather?.name ?? "",
-          color: Colors.white,
-          fontSize: 18,
-          height: 0.10,
-          fontWeight: FontWeight.w600,
-        ),
+        title: Observer(builder: (context) {
+          return CustomText(
+            text: weatherStore.weather?.city.name ?? "",
+            color: Colors.white,
+            fontSize: 18,
+            height: 0.10,
+            fontWeight: FontWeight.w600,
+          );
+        }),
+        actions: [
+          IconButton(
+            onPressed: () {
+              inicialize();
+            },
+            padding: const EdgeInsets.all(0),
+            icon: const SizedBox(
+              width: 40,
+              height: 40,
+              child: Icon(
+                Icons.refresh,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
         centerTitle: true,
       ),
       body: Center(
@@ -110,7 +128,8 @@ class _HomePageViewState extends State<HomePageView> {
             padding: const EdgeInsets.all(10),
             child: CustomImageView(
               imagePath: Helpers.imageClima(
-                  weatherStore.weather?.weather.first.main ?? "Clear"),
+                  weatherStore.weather?.list.first.weather.first.main ??
+                      "Clear"),
               height: 122,
               width: 130,
             ),
@@ -119,7 +138,8 @@ class _HomePageViewState extends State<HomePageView> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                weatherStore.weather?.main.temp.toStringAsFixed(1) ?? "",
+                weatherStore.weather?.list.first.main.temp.toStringAsFixed(1) ??
+                    "",
                 style: theme.textTheme.displayLarge,
               ),
               Padding(
@@ -136,24 +156,54 @@ class _HomePageViewState extends State<HomePageView> {
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: CustomText(
-              text: Helpers.dateForBR,
-              fontSize: 13,
-              height: 0.12,
-              fontWeight: FontWeight.w500,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: CustomText(
+                  text: Helpers.dateForBR,
+                  fontSize: 13,
+                  height: 0.12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: CustomText(
+                  text:
+                      "Feels Like: ${weatherStore.weather?.list.first.main.feelsLike.toStringAsFixed(1)}˚",
+                  fontSize: 13,
+                  height: 0.12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
           ),
-          const Row(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
                 padding: EdgeInsets.all(20.0),
                 child: CustomText(
                   text: "Infos",
-                  fontSize: 20,
+                  fontSize: 18,
                   height: 0.12,
                   fontWeight: FontWeight.w500,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(20.0),
+                child: TextButton(
+                  onPressed: () {
+                    Modular.to.pushNamed("/five_days");
+                  },
+                  child: CustomText(
+                    text: "Next 5 days > ",
+                    fontSize: 18,
+                    height: 0.12,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ],
@@ -162,18 +212,15 @@ class _HomePageViewState extends State<HomePageView> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              InkWell(
-                onTap: () {
-                  Modular.to.pushNamed("/five_days");
-                },
-                child: CustomContainer(
-                  text: "Min",
-                  info: "${weatherStore.weather?.main.tempMin.toString()}˚",
-                ),
+              CustomContainer(
+                text: "Min",
+                info:
+                    "${weatherStore.weather?.list.first.main.tempMin.toString()}˚",
               ),
               CustomContainer(
                 text: "Max",
-                info: "${weatherStore.weather?.main.tempMax.toString()}˚",
+                info:
+                    "${weatherStore.weather?.list.first.main.tempMax.toString()}˚",
               ),
             ],
           ),
@@ -186,11 +233,13 @@ class _HomePageViewState extends State<HomePageView> {
             children: [
               CustomContainer(
                 text: "Humidity",
-                info: "${weatherStore.weather?.main.humidity.toString()}%",
+                info:
+                    "${weatherStore.weather?.list.first.main.humidity.toString()}%",
               ),
               CustomContainer(
                 text: "Wind",
-                info: "${weatherStore.weather?.wind.speed.toString()} Km/h",
+                info:
+                    "${weatherStore.weather?.list.first.wind.speed.toString()} Km/h",
               ),
             ],
           ),

@@ -41,41 +41,41 @@ class Helpers {
   }
 
   static List<String> semana = [
-    "Domingo",
-    "Segunda",
-    "Terça",
-    "Quarta",
-    "Quinta",
-    "Sexta",
-    "Sabado",
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
   ];
 
   static List<String> semanasGetModel = [
-    "domingo",
-    "segunda",
-    "terca",
-    "quarta",
-    "quinta",
-    "sexta",
-    "sabado",
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
   ];
 
   static String getWeekdayName(int weekday) {
     switch (weekday) {
       case 1:
-        return "segunda";
+        return "Monday";
       case 2:
-        return "terca";
+        return "Tuesday";
       case 3:
-        return "quarta";
+        return "Wednesday";
       case 4:
-        return "quinta";
+        return "Thursday";
       case 5:
-        return "sexta";
+        return "Friday";
       case 6:
-        return "sabado";
+        return "Saturday";
       case 7:
-        return "domingo";
+        return "Sunday";
       default:
         return "";
     }
@@ -84,28 +84,33 @@ class Helpers {
   static String getWeekday(int weekday) {
     switch (weekday) {
       case 1:
-        return "Segunda";
+        return "Monday";
       case 2:
-        return "Terça";
+        return "Tuesday";
       case 3:
-        return "Quarta";
+        return "Wednesday";
       case 4:
-        return "Quinta";
+        return "Thursday";
       case 5:
-        return "Sexta";
+        return "Friday";
       case 6:
-        return "Sábado";
+        return "Saturday";
       case 7:
-        return "Domingo";
+        return "Sunday";
       default:
         return "";
     }
   }
 
   static String convertToWeekday(String dtTxt) {
-    DateTime dateTime = DateTime.parse(dtTxt);
-    String weekday = DateFormat.EEEE().format(dateTime);
-    return weekday;
+    if (dtTxt == "") {
+      return "";
+    } else {
+      DateTime dateTime = DateTime.parse(dtTxt);
+      String dayOfWeek = DateFormat.E().format(dateTime).toUpperCase();
+      String time = DateFormat.Hm().format(dateTime);
+      return '$dayOfWeek-${time}H';
+    }
   }
 
   static String imageClima(String clima) {

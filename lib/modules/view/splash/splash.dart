@@ -6,6 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:forecast_app/core/const/api.dart';
 
+import '../../../core/const/image_constant.dart';
+import '../../../core/helpers/helpers.dart';
+import '../../../core/helpers/theme_helper.dart';
+import '../../../core/widgets/custom_image_view.dart';
+
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
 
@@ -25,7 +30,6 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    // SystemChrome.setEnabledSystemUIOverlays([]);
     Apis();
     startTimeout();
   }
@@ -33,9 +37,21 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Container(
-        margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: const Alignment(0.5, 0),
+              end: const Alignment(0.5, 1),
+              colors: [
+                appTheme.indigo90001,
+                appTheme.indigo900,
+                appTheme.blueGray900
+              ]),
+          image: DecorationImage(
+              opacity: 0.2,
+              image: AssetImage(ImageConstant.imgGroup88),
+              fit: BoxFit.cover),
+        ),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -46,7 +62,11 @@ class _SplashPageState extends State<SplashPage> {
                 margin: const EdgeInsets.only(
                   top: 15.0,
                 ),
-                child: const Text("Teste"),
+                child: CustomImageView(
+                  imagePath: Helpers.imageClima("Clear"),
+                  height: 122,
+                  width: 130,
+                ),
               ),
             ],
           ),

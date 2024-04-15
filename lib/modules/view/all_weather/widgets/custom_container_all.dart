@@ -24,14 +24,14 @@ class CustomContainerAll extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-            width: 90,
+            width: 110,
             child: Text(
               weekDay,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 16,
+                fontSize: 15,
                 fontFamily: 'Poppins',
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),

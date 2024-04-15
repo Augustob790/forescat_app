@@ -4,10 +4,9 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import '../../../core/const/api.dart';
 import '../../domain/model/weather_forecast_model.dart';
-import '../../domain/model/weather_model.dart';
 
 abstract class WeatherRepository {
-  Future<WeatherModel> getCityWeather(String cityName);
+  Future<WeatherForecast> getCityWeather(String cityName);
   Future<WeatherForecast> getAllWeather(String cityName);
   Future<String> getCity();
 }
@@ -18,7 +17,7 @@ class WeatherRepositoryImpl implements WeatherRepository {
 
   @override
   Future<WeatherForecast> getAllWeather(String cityName) async {
-    String url = "forecast?q=$cityName&appid=$apiKey&units=metric&cnt=39";
+    String url = "forecast?q=$cityName&appid=$apiKey&units=metric";
     try {
       final response = await dio.get(url);
       return WeatherForecast.fromJson(response.data);
@@ -37,11 +36,11 @@ class WeatherRepositoryImpl implements WeatherRepository {
   }
 
   @override
-  Future<WeatherModel> getCityWeather(String cityName) async {
-    String url = "weather?q=$cityName&appid=$apiKey&units=metric";
+  Future<WeatherForecast> getCityWeather(String cityName) async {
+    String url = "forecast?q=$cityName&appid=$apiKey&units=metric&cnt=1";
     try {
       final response = await dio.get(url);
-      return WeatherModel.fromJson(response.data);
+      return WeatherForecast.fromJson(response.data);
     } on DioException catch (e) {
       if (e.type == DioExceptionType.connectionTimeout ||
           e.type == DioExceptionType.receiveTimeout) {

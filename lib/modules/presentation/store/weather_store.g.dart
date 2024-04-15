@@ -27,13 +27,13 @@ mixin _$WeatherStore on _WeatherStoreBase, Store {
   final _$weatherAtom = Atom(name: '_WeatherStoreBase.weather');
 
   @override
-  WeatherModel? get weather {
+  WeatherForecast? get weather {
     _$weatherAtom.reportRead();
     return super.weather;
   }
 
   @override
-  set weather(WeatherModel? value) {
+  set weather(WeatherForecast? value) {
     _$weatherAtom.reportWrite(value, super.weather, () {
       super.weather = value;
     });
@@ -65,7 +65,7 @@ mixin _$WeatherStore on _WeatherStoreBase, Store {
       AsyncAction('_WeatherStoreBase.getCityWeather');
 
   @override
-  Future<WeatherModel> getCityWeather(String name) {
+  Future<WeatherForecast> getCityWeather(String name) {
     return _$getCityWeatherAction.run(() => super.getCityWeather(name));
   }
 
