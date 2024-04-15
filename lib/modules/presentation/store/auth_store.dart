@@ -12,6 +12,9 @@ class AuthStore = _AuthStore with _$AuthStore;
 
 abstract class _AuthStore with Store {
   final auth = Modular.get<AuthService>();
+  final loginFormKey = GlobalKey<FormState>();
+  final signFormKey = GlobalKey<FormState>();
+
   @observable
   TextEditingController emailController = TextEditingController();
 

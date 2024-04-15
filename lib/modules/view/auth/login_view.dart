@@ -20,33 +20,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final auth = Modular.get<AuthStore>();
-  final formKey = GlobalKey<FormState>();
 
-  bool isLogin = true;
-  bool loading = false;
-
-  // login(context) async {
-  //   setState(() => loading = true);
-  //   try {
-  //     await auth.login(email.text, senha.text);
-  //   } on AuthException catch (e) {
-  //     setState(() => loading = false);
-  //     ScaffoldMessenger.of(context)
-  //         .showSnackBar(SnackBar(content: Text(e.message)));
-  //   }
-  // }
-
-  // registrar(context) async {
-  //   setState(() => loading = true);
-  //   try {
-  //     await auth.registrar(email.text, senha.text);
-  //     Modular.to.pushReplacementNamed('/home');
-  //   } on AuthException catch (e) {
-  //     setState(() => loading = false);
-  //     ScaffoldMessenger.of(context)
-  //         .showSnackBar(SnackBar(content: Text(e.message)));
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             Form(
-              key: formKey,
+              key: auth.loginFormKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -140,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.all(20.0),
                     child: CustomButtonStandard(
                       onTap: () {
-                        if (formKey.currentState!.validate()) {
+                        if (auth.loginFormKey.currentState!.validate()) {
                           auth.login(auth.emailController.text,
                               auth.passwordController.text);
                         }

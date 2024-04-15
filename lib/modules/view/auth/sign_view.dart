@@ -20,41 +20,6 @@ class SignPageView extends StatefulWidget {
 
 class _SignPageViewState extends State<SignPageView> {
   final auth = Modular.get<AuthStore>();
-  final formKey = GlobalKey<FormState>();
-
-  bool isLogin = true;
-  late String titulo;
-  late String actionButton;
-  late String toggleButton;
-  bool loading = false;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  // login(context) async {
-  //   setState(() => loading = true);
-  //   try {
-  //     await auth.login(email.text, senha.text);
-  //   } on AuthException catch (e) {
-  //     setState(() => loading = false);
-  //     ScaffoldMessenger.of(context)
-  //         .showSnackBar(SnackBar(content: Text(e.message)));
-  //   }
-  // }
-
-  // registrar(context) async {
-  //   setState(() => loading = true);
-  //   try {
-  //     await auth.registrar(email.text, senha.text);
-  //          Modular.to.pushReplacementNamed('/home');
-  //   } on AuthException catch (e) {
-  //     setState(() => loading = false);
-  //     ScaffoldMessenger.of(context)
-  //         .showSnackBar(SnackBar(content: Text(e.message)));
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +85,7 @@ class _SignPageViewState extends State<SignPageView> {
               ),
             ),
             Form(
-              key: formKey,
+              key: auth.signFormKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -176,7 +141,7 @@ class _SignPageViewState extends State<SignPageView> {
                   ),
                   CustomButtonStandard(
                       onTap: () {
-                        if (formKey.currentState!.validate()) {
+                        if (auth.signFormKey.currentState!.validate()) {
                           auth.registrar(auth.emailController.text,
                               auth.passwordController.text);
                         }
