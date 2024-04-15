@@ -6,10 +6,11 @@ part of 'weather_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$WeatherStore on _WeatherStoreBase, Store {
-  final _$forecastAtom = Atom(name: '_WeatherStoreBase.forecast');
+  late final _$forecastAtom =
+      Atom(name: '_WeatherStoreBase.forecast', context: context);
 
   @override
   WeatherForecast? get forecast {
@@ -24,7 +25,8 @@ mixin _$WeatherStore on _WeatherStoreBase, Store {
     });
   }
 
-  final _$weatherAtom = Atom(name: '_WeatherStoreBase.weather');
+  late final _$weatherAtom =
+      Atom(name: '_WeatherStoreBase.weather', context: context);
 
   @override
   WeatherForecast? get weather {
@@ -39,7 +41,8 @@ mixin _$WeatherStore on _WeatherStoreBase, Store {
     });
   }
 
-  final _$cityNameAtom = Atom(name: '_WeatherStoreBase.cityName');
+  late final _$cityNameAtom =
+      Atom(name: '_WeatherStoreBase.cityName', context: context);
 
   @override
   String? get cityName {
@@ -54,29 +57,8 @@ mixin _$WeatherStore on _WeatherStoreBase, Store {
     });
   }
 
-  final _$getAllWeatherAction = AsyncAction('_WeatherStoreBase.getAllWeather');
-
-  @override
-  Future<WeatherForecast> getAllWeather(String cityName) {
-    return _$getAllWeatherAction.run(() => super.getAllWeather(cityName));
-  }
-
-  final _$getCityWeatherAction =
-      AsyncAction('_WeatherStoreBase.getCityWeather');
-
-  @override
-  Future<WeatherForecast> getCityWeather(String name) {
-    return _$getCityWeatherAction.run(() => super.getCityWeather(name));
-  }
-
-  final _$getCurrentCity = AsyncAction('_WeatherStoreBase.getCurrentCity');
-
-  @override
-  Future<String> getCurrentCity() {
-    return _$getCurrentCity.run(() => super.getCurrentCity());
-  }
-
-  final _$errorMessageAtom = Atom(name: '_WeatherStoreBase.errorMessage');
+  late final _$errorMessageAtom =
+      Atom(name: '_WeatherStoreBase.errorMessage', context: context);
 
   @override
   dynamic get errorMessage {
@@ -91,7 +73,8 @@ mixin _$WeatherStore on _WeatherStoreBase, Store {
     });
   }
 
-  final _$isLoadingAtom = Atom(name: '_WeatherStoreBase.isLoading');
+  late final _$isLoadingAtom =
+      Atom(name: '_WeatherStoreBase.isLoading', context: context);
 
   @override
   dynamic get isLoading {
@@ -106,13 +89,39 @@ mixin _$WeatherStore on _WeatherStoreBase, Store {
     });
   }
 
+  late final _$getAllWeatherAsyncAction =
+      AsyncAction('_WeatherStoreBase.getAllWeather', context: context);
+
+  @override
+  Future<WeatherForecast> getAllWeather(String cityName) {
+    return _$getAllWeatherAsyncAction.run(() => super.getAllWeather(cityName));
+  }
+
+  late final _$getCityWeatherAsyncAction =
+      AsyncAction('_WeatherStoreBase.getCityWeather', context: context);
+
+  @override
+  Future<WeatherForecast> getCityWeather(String cityName) {
+    return _$getCityWeatherAsyncAction
+        .run(() => super.getCityWeather(cityName));
+  }
+
+  late final _$getCurrentCityAsyncAction =
+      AsyncAction('_WeatherStoreBase.getCurrentCity', context: context);
+
+  @override
+  Future<String> getCurrentCity() {
+    return _$getCurrentCityAsyncAction.run(() => super.getCurrentCity());
+  }
+
   @override
   String toString() {
     return '''
+forecast: ${forecast},
+weather: ${weather},
+cityName: ${cityName},
+errorMessage: ${errorMessage},
 isLoading: ${isLoading}
-errorMessage: ${errorMessage}
-weather: ${weather}
-cityName: ${cityName}
     ''';
   }
 }

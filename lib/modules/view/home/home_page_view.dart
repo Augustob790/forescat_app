@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:forecast_app/modules/services/auth_services.dart';
 import '../../../core/const/image_constant.dart';
 import 'widget/custom_container.dart';
 import '../../../core/widgets/custom_text.dart';
@@ -22,6 +23,7 @@ class HomePageView extends StatefulWidget {
 
 class _HomePageViewState extends State<HomePageView> {
   late final WeatherStore weatherStore;
+  final auth = Modular.get<AuthService>();
   String city = " ";
 
   @override
@@ -45,6 +47,16 @@ class _HomePageViewState extends State<HomePageView> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        leading: IconButton(
+          onPressed: () {
+            auth.logout();
+            Modular.to.pushReplacementNamed('/login');
+          },
+          icon: Icon(
+            Icons.exit_to_app,
+            color: Colors.white,
+          ),
+        ),
         title: Observer(builder: (context) {
           return CustomText(
             text: weatherStore.weather?.city.name ?? "",

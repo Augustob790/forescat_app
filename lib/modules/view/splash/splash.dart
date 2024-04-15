@@ -10,6 +10,7 @@ import '../../../core/const/image_constant.dart';
 import '../../../core/helpers/helpers.dart';
 import '../../../core/helpers/theme_helper.dart';
 import '../../../core/widgets/custom_image_view.dart';
+import '../../services/auth_services.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -19,12 +20,18 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  final auth = Modular.get<AuthService>();
   startTimeout() {
-    return Timer(const Duration(seconds: 5), changeScreen);
+    return Timer(const Duration(seconds: 5), verificationAuth);
   }
 
-  changeScreen() async {
-    Modular.to.pushReplacementNamed('/home');
+
+  verificationAuth() async {
+    if (auth.usuario == null) {
+      Modular.to.pushReplacementNamed('/login');
+    } else {
+      Modular.to.pushReplacementNamed('/home');
+    }
   }
 
   @override
@@ -56,7 +63,7 @@ class _SplashPageState extends State<SplashPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
+            children: [
               Container(
                 alignment: Alignment.center,
                 margin: const EdgeInsets.only(
