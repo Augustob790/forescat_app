@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import '../../../core/const/app_decoration.dart';
 import '../../../core/helpers/helpers.dart';
 import '../../../core/helpers/theme_helper.dart';
 import 'widgets/custom_container_all.dart';
-import '../../../core/widgets/custom_image_view.dart';
 import '../../../core/widgets/custom_text.dart';
 
 import '../../presentation/store/weather_store.dart';

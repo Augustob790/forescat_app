@@ -16,7 +16,7 @@ class AppModule extends Module {
     i.addLazySingleton<WeatherRepository>(WeatherRepositoryImpl.new);
     i.addLazySingleton<GetCityWeatherUsecase>(GetCityWeatherUsecaseImpl.new);
     i.addLazySingleton<GetAllWeatherUsecase>(GetAllWeatherUsecaseImpl.new);
-    i.addLazySingleton<GetAllCurrentCityUsecase>(GetAllCurrentCityUsecaseImpl.new);
+    i.addLazySingleton<GetCurrentCityUsecase>(GetCurrentCityUsecaseImpl.new);
     i.addLazySingleton(WeatherStore.new);
     i.add(HomePageViewModel.new);
   }

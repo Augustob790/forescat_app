@@ -4,7 +4,7 @@ import '../domain/usecases/get_city_use_cases.dart';
 
 class HomePageViewModel {
   final GetCityWeatherUsecaseImpl getAllWeatherUsecase;
-  final GetAllCurrentCityUsecaseImpl getAllCurrentCityUsecase;
+  final GetCurrentCityUsecaseImpl getAllCurrentCityUsecase;
 
   HomePageViewModel({
     required this.getAllWeatherUsecase,
