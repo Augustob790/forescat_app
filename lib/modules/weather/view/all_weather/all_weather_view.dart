@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import '../../../../core/const/image_constant.dart';
 import '../../../../core/helpers/helpers.dart';
 import '../../../../core/helpers/theme_helper.dart';
 import 'widgets/custom_container_all.dart';
@@ -24,10 +25,16 @@ class _AllWeatherViewState extends State<AllWeatherView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true,
-      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: const Alignment(0.5, 0.5),
+              end: const Alignment(0.5, 2.5),
+              colors: [appTheme.indigo900, appTheme.blueGray700],
+            ),
+          ),
+        ),
         elevation: 0,
         title: const Text(
           'Next 5 days',
@@ -71,21 +78,28 @@ class _AllWeatherViewState extends State<AllWeatherView> {
             colors: [
               appTheme.indigo90001,
               appTheme.indigo900,
-              appTheme.blueGray900
             ]),
+        image: DecorationImage(
+            opacity: 0.2,
+            image: AssetImage(ImageConstant.imgGroup88),
+            fit: BoxFit.cover),
       ),
       child: Column(
         children: [
           Container(
-            margin: const EdgeInsets.only(top: 150, bottom: 20),
+            margin: const EdgeInsets.all(20),
             child: CustomText(
-              text: Helpers.convertToWeekday(weatherStore.forecast!.list.first.date),
+              text: Helpers.convertToWeekday(
+                  weatherStore.forecast!.list.first.date),
               fontSize: 18.35,
               height: 0.08,
               fontWeight: FontWeight.w600,
             ),
           ),
-          CustomContainer(list: weatherStore.forecast!.list),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: CustomContainer(list: weatherStore.forecast!.list),
+          ),
           Expanded(
             child: ListView.builder(
                 padding: const EdgeInsets.only(top: 30),

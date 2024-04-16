@@ -47,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               Container(
                 margin: const EdgeInsets.only(
-                  top: 140,
+                  top: 80,
                   bottom: 10,
                 ),
                 alignment: Alignment.center,

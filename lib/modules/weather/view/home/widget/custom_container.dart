@@ -15,7 +15,7 @@ class CustomContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 150,
-      height: 150,
+      height: 120,
       decoration: ShapeDecoration(
         gradient: const LinearGradient(
           begin: Alignment(0.00, -1.00),

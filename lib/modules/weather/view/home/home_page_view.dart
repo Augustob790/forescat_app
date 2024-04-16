@@ -42,10 +42,19 @@ class _HomePageViewState extends State<HomePageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true,
-      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: const Alignment(0.5,0.5),
+              end: const Alignment(0.5, 2.5),
+              colors: [
+                appTheme.indigo900,
+                appTheme.blueGray700
+              ],
+            ),
+          ),
+        ),
         elevation: 0,
         leading: IconButton(
           onPressed: () {
@@ -105,7 +114,6 @@ class _HomePageViewState extends State<HomePageView> {
 
   Widget getBodyUI() {
     return Container(
-      padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         gradient: LinearGradient(
             begin: const Alignment(0.5, 0),
@@ -113,7 +121,6 @@ class _HomePageViewState extends State<HomePageView> {
             colors: [
               appTheme.indigo90001,
               appTheme.indigo900,
-              appTheme.blueGray900
             ]),
         image: DecorationImage(
             opacity: 0.2,
@@ -122,29 +129,20 @@ class _HomePageViewState extends State<HomePageView> {
       ),
       child: Column(
         children: [
-          Container(
-              margin: const EdgeInsets.only(
-                top: 140,
-                bottom: 10,
-              ),
-              child: Center(
-                child: CustomText(
-                  text: Helpers.weekdayNameView,
-                  fontSize: 18.35,
-                  height: 0.08,
-                  fontWeight: FontWeight.w600,
-                ),
-              )),
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 1, horizontal: 20),
-            padding: const EdgeInsets.all(10),
-            child: CustomImageView(
-              imagePath: Helpers.imageClima(
-                  weatherStore.weather?.list.first.weather.first.main ??
-                      "Clear"),
-              height: 122,
-              width: 130,
+          Padding(
+            padding: const EdgeInsets.only(top: 30.0, bottom: 25),
+            child: CustomText(
+              text: Helpers.weekdayNameView,
+              fontSize: 18.35,
+              height: 0.08,
+              fontWeight: FontWeight.w600,
             ),
+          ),
+          CustomImageView(
+            imagePath: Helpers.imageClima(
+                weatherStore.weather?.list.first.weather.first.main ?? "Clear"),
+            height: 120,
+            width: 130,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -192,21 +190,18 @@ class _HomePageViewState extends State<HomePageView> {
               ),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: EdgeInsets.all(20.0),
-                child: CustomText(
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CustomText(
                   text: "Infos",
                   fontSize: 18,
                   height: 0.12,
                   fontWeight: FontWeight.w500,
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(20.0),
-                child: TextButton(
+                TextButton(
                   onPressed: () {
                     Modular.to.pushNamed("/weather/five_days");
                   },
@@ -217,8 +212,8 @@ class _HomePageViewState extends State<HomePageView> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -237,7 +232,7 @@ class _HomePageViewState extends State<HomePageView> {
             ],
           ),
           const SizedBox(
-            height: 20,
+            height: 15,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
