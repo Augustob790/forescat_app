@@ -41,20 +41,4 @@ class NotificationsManager {
       {int id = 0, String? title, String? body, String? payload}) {
     return notificationsPlugin.show(id, title, body, notificationsDetails());
   }
-
-  // Future<void> simpleNotification() async {
-  //   AndroidNotificationDetails android = AndroidNotificationDetails(
-  //     'channelId',
-  //     'channelName',
-  //     priority: Priority.high,
-  //     importance: Importance.max,
-  //     icon: ImageConstant.imgDownload1,
-  //     largeIcon: DrawableResourceAndroidBitmap(ImageConstant.imgDownload1),
-  //   );
-
-  //   NotificationDetails notificationDetails = NotificationDetails(
-  //     android: android,
-  //   );
-  //   await notificationsPlugin.show(0, "teste", "teste", notificationDetails);
-  // }
 }
