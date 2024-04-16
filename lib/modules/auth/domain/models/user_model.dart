@@ -21,6 +21,6 @@ class UserModel {
     return UserModel(
         email: snapshot['email'],
         uid: snapshot['uid'],
-        photoImage: snapshot['username']);
+        photoImage: snapshot['photoImage']);
   }
 }

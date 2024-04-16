@@ -73,6 +73,21 @@ mixin _$AuthStore on _AuthStore, Store {
     });
   }
 
+  late final _$usuarioAtom = Atom(name: '_AuthStore.usuario', context: context);
+
+  @override
+  User? get usuario {
+    _$usuarioAtom.reportRead();
+    return super.usuario;
+  }
+
+  @override
+  set usuario(User? value) {
+    _$usuarioAtom.reportWrite(value, super.usuario, () {
+      super.usuario = value;
+    });
+  }
+
   late final _$imagesAtom = Atom(name: '_AuthStore.images', context: context);
 
   @override
@@ -102,6 +117,14 @@ mixin _$AuthStore on _AuthStore, Store {
   @override
   Future getUser() {
     return _$getUserAsyncAction.run(() => super.getUser());
+  }
+
+  late final _$selectImageAsyncAction =
+      AsyncAction('_AuthStore.selectImage', context: context);
+
+  @override
+  Future selectImage() {
+    return _$selectImageAsyncAction.run(() => super.selectImage());
   }
 
   late final _$loginAsyncAction =
@@ -145,6 +168,7 @@ emailController: ${emailController},
 passwordController: ${passwordController},
 isLoading: ${isLoading},
 userModel: ${userModel},
+usuario: ${usuario},
 images: ${images}
     ''';
   }

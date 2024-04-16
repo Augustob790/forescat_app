@@ -10,24 +10,24 @@ import '../../const/image_constant.dart';
 import '../../helpers/helpers.dart';
 import '../../helpers/theme_helper.dart';
 import '../../widgets/custom_image_view.dart';
-import '../../../modules/auth/services/firebase_auth_services.dart';
+import '../../../modules/auth/services/firebase_services.dart';
 
 class SplashPage extends StatefulWidget {
-  const SplashPage({super.key});
+  const SplashPage({super.key, required this.service});
+
+  final FirebaseAuthService service;
 
   @override
   _SplashPageState createState() => _SplashPageState();
 }
 
 class _SplashPageState extends State<SplashPage> {
-  final auth = Modular.get<FirebaseAuthService>();
   startTimeout() {
     return Timer(const Duration(seconds: 5), verificationAuth);
   }
 
-
   verificationAuth() async {
-    if (auth.usuario == null) {
+    if (widget.service.usuario == null) {
       Modular.to.pushReplacementNamed('/auth/login');
     } else {
       Modular.to.pushReplacementNamed('/weather/home');

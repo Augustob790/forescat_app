@@ -14,14 +14,16 @@ import '../../../../core/widgets/input_personalized.dart';
 import '../../presentation/auth_store.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({super.key, required this.authStore});
+
+  final AuthStore authStore;
 
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final auth = Modular.get<AuthStore>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               Form(
-                key: auth.loginFormKey,
+                key: widget.authStore.loginFormKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -74,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                     Padding(
                       padding: const EdgeInsets.all(20),
                       child: InputPersonalized(
-                        controller: auth.emailController,
+                        controller: widget.authStore.emailController,
                         labelText: 'E-mail',
                         keyboardType: TextInputType.emailAddress,
                         autovalidateMode: AutovalidateMode.disabled,
@@ -93,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                     Padding(
                       padding: const EdgeInsets.all(20),
                       child: InputPersonalized(
-                        controller: auth.passwordController,
+                        controller: widget.authStore.passwordController,
                         labelText: 'Password',
                         obscureText: true,
                         autovalidateMode: AutovalidateMode.disabled,
@@ -116,9 +118,9 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.all(15.0),
                       child: CustomButtonStandard(
                         onTap: () {
-                          if (auth.loginFormKey.currentState!.validate()) {
-                            auth.login(auth.emailController.text,
-                                auth.passwordController.text);
+                          if (widget.authStore.loginFormKey.currentState!.validate()) {
+                            widget.authStore.login(widget.authStore.emailController.text,
+                                widget.authStore.passwordController.text);
                           }
                         },
                         color: const Color(0xFF947CCD),
@@ -161,7 +163,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: SignInButton(
                         Buttons.Google,
                         onPressed: () {
-                          auth.loginGoogle();
+                          widget.authStore.loginGoogle();
                         },
                       ),
                     ),

@@ -17,7 +17,7 @@ class AppModule extends Module {
 
   @override
   void routes(RouteManager r) {
-    r.child("/", child: (_) => const SplashPage());
+    r.child("/", child: (_) => SplashPage(service: Modular.get()));
     r.module("/auth", module: AuthModule());
     r.module("/weather", module: WeatherModule());
   }

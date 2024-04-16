@@ -2,19 +2,22 @@
 
 import 'dart:typed_data';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
 
+import '../../../core/helpers/helpers.dart';
 import '../domain/models/user_model.dart';
-import '../services/firebase_auth_services.dart';
+import '../services/firebase_services.dart';
 
 part "auth_store.g.dart";
 
 class AuthStore = _AuthStore with _$AuthStore;
 
 abstract class _AuthStore with Store {
-  final auth = Modular.get<FirebaseAuthService>();
+  final service = Modular.get<FirebaseAuthService>();
   final loginFormKey = GlobalKey<FormState>();
   final signFormKey = GlobalKey<FormState>();
 
@@ -31,23 +34,33 @@ abstract class _AuthStore with Store {
   UserModel? userModel;
 
   @observable
+  User? usuario;
+
+  @observable
   Uint8List? images;
 
   @action
   logout() async {
-    await auth.logout();
+    await service.logout();
+    Modular.to.pushReplacementNamed('/auth/login');
   }
 
   @action
   getUser() async {
-    await auth.getUser();
+    usuario = await service.getUser();
+  }
+
+  @action
+  selectImage() async {
+    Uint8List img = await Helpers.pickImage(ImageSource.gallery);
+    images = img;
   }
 
   @action
   Future<void> login(String email, String senha) async {
     isLoading = "isLoading";
     try {
-      await auth.login(email, senha);
+      await service.login(email, senha);
       Modular.to.pushReplacementNamed('/weather/home');
       isLoading = "sucess";
     } catch (e) {
@@ -60,7 +73,7 @@ abstract class _AuthStore with Store {
   Future<void> loginGoogle() async {
     isLoading = "isLoading";
     try {
-      await auth.signInWithGoogle();
+      await service.signInWithGoogle();
       Modular.to.pushReplacementNamed('/weather/home');
       isLoading = "sucess";
     } catch (e) {
@@ -70,11 +83,13 @@ abstract class _AuthStore with Store {
   }
 
   @action
-  Future<void> registrar(String email, String senha, Uint8List file, String image) async {
+  Future<void> registrar(
+      String email, String senha, Uint8List file, String image) async {
     isLoading = "isLoading";
     try {
-      await auth.registrar(email, senha, images!, "");
+      await service.registrar(email, senha, images!, "");
       Modular.to.pushReplacementNamed('/weather/home');
+      getUserFire();
       isLoading = "sucess";
     } catch (e) {
       isLoading = "error";
@@ -86,7 +101,7 @@ abstract class _AuthStore with Store {
   Future<void> getUserFire() async {
     isLoading = "isLoading";
     try {
-      userModel = await auth.getUserFire();
+      userModel = await service.getUserFire();
       isLoading = "sucess";
     } catch (e) {
       isLoading = "error";

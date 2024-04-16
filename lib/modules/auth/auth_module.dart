@@ -1,6 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'presentation/auth_store.dart';
-import 'services/firebase_auth_services.dart';
+import 'services/firebase_services.dart';
 import 'view/create_account/create_account_view.dart';
 import 'view/login/login_view.dart';
 
@@ -14,8 +14,8 @@ class AuthModule extends Module {
 
   @override
   void routes(RouteManager r) {
-    r.child("/login", child: (_) => const LoginPage());
-    r.child("/sign", child: (_) => const SignPageView());
+    r.child("/login", child: (_) => LoginPage(authStore: Modular.get()));
+    r.child("/sign", child: (_) => SignPageView(authStore: Modular.get()));
     super.routes(r);
   }
 }

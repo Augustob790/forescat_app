@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:forecast_app/modules/auth/services/firebase_auth_services.dart';
 import '../../../../core/const/image_constant.dart';
-import '../../../../core/notifications/notifications_manager.dart';
+import '../../../auth/presentation/auth_store.dart';
+import '../../../auth/services/firebase_services.dart';
 import 'widget/custom_container.dart';
 import '../../../../core/widgets/custom_text.dart';
 import '../../../../core/widgets/get_error_ui.dart';
@@ -16,28 +16,29 @@ import '../../../../core/helpers/helpers.dart';
 import '../../../../core/helpers/theme_helper.dart';
 
 class HomePageView extends StatefulWidget {
-  const HomePageView({super.key});
+  const HomePageView(
+      {super.key, required this.weatherStore, required this.authStore});
+
+  final WeatherStore weatherStore;
+  final AuthStore authStore;
 
   @override
   State<HomePageView> createState() => _HomePageViewState();
 }
 
-class _HomePageViewState extends State<HomePageView> {
-  late final WeatherStore weatherStore;
-  final auth = Modular.get<FirebaseAuthService>();
-  String city = " ";
+final service = Modular.get<FirebaseAuthService>();
 
+class _HomePageViewState extends State<HomePageView> {
   @override
   void initState() {
     super.initState();
-    weatherStore = Modular.get<WeatherStore>();
     inicialize();
   }
 
   inicialize() async {
-    await weatherStore.getCurrentCity();
-    await weatherStore.getCityWeather(weatherStore.city);
-    await weatherStore.getAllWeather(weatherStore.city);
+    await widget.weatherStore.getCurrentCity();
+    await widget.weatherStore.getCityWeather(widget.weatherStore.city);
+    await widget.weatherStore.getAllWeather(widget.weatherStore.city);
   }
 
   @override
@@ -53,20 +54,13 @@ class _HomePageViewState extends State<HomePageView> {
             ),
           ),
         ),
-        elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            auth.logout();
-            Modular.to.pushReplacementNamed('/auth/login');
-          },
-          icon: Icon(
-            Icons.exit_to_app,
-            color: Colors.white,
-          ),
+        iconTheme: IconThemeData(
+          color: Colors.white, // Cor do ícone
         ),
+        elevation: 0,
         title: Observer(builder: (context) {
           return CustomText(
-            text: weatherStore.weather?.city.name ?? "",
+            text: widget.weatherStore.weather?.city.name ?? "",
             color: Colors.white,
             fontSize: 18,
             height: 0.10,
@@ -76,9 +70,7 @@ class _HomePageViewState extends State<HomePageView> {
         actions: [
           IconButton(
             onPressed: () {
-              //  inicialize();
-              NotificationsManager().simpleNotification();
-              
+              inicialize();
             },
             padding: const EdgeInsets.all(0),
             icon: const SizedBox(
@@ -93,15 +85,74 @@ class _HomePageViewState extends State<HomePageView> {
         ],
         centerTitle: true,
       ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: const Alignment(0.5, 0),
+                    end: const Alignment(0.5, 1),
+                    colors: [
+                      appTheme.indigo90001,
+                      appTheme.indigo900,
+                    ]),
+                image: DecorationImage(
+                    opacity: 0.2,
+                    image: AssetImage(ImageConstant.imgGroup88),
+                    fit: BoxFit.cover),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundImage: NetworkImage(
+                        widget.authStore.userModel?.photoImage == null
+                            ? service.usuario?.photoURL ?? ""
+                            : widget.authStore.userModel?.photoImage ?? ""),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    widget.authStore.userModel?.email == null
+                        ? service.usuario?.email ?? ""
+                        : "",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              trailing: IconButton(
+                onPressed: () {
+                  widget.authStore.logout();
+                },
+                icon: Icon(
+                  Icons.exit_to_app,
+                  color: Colors.black,
+                ),
+              ),
+              title: Text('Sair'),
+              onTap: () {
+                // Implemente a ação de sair
+              },
+            ),
+          ],
+        ),
+      ),
       body: Center(
         child: Observer(
           builder: (context) {
-            if (weatherStore.isLoading == "isLoading") {
+            if (widget.weatherStore.isLoading == "isLoading") {
               return const LoadUi();
-            } else if (weatherStore.errorMessage == "error") {
+            } else if (widget.weatherStore.errorMessage == "error") {
               return const GetErrorUi(error: "Error");
-            } else if (weatherStore.weather != null &&
-                weatherStore.isLoading == "sucess") {
+            } else if (widget.weatherStore.weather != null &&
+                widget.weatherStore.isLoading == "sucess") {
               return getBodyUI();
             } else {
               return const LoadUi();
@@ -140,12 +191,13 @@ class _HomePageViewState extends State<HomePageView> {
           ),
           CustomImageView(
             imagePath: Helpers.imageClima(
-                weatherStore.weather?.list.first.weather.first.main ?? "Clear"),
+                widget.weatherStore.weather?.list.first.weather.first.main ??
+                    "Clear"),
             height: 120,
             width: 130,
           ),
           CustomText(
-            text: auth.usuarioFire?.email ?? "",
+            text: widget.authStore.userModel?.email ?? "",
             fontSize: 18.35,
             height: 0.08,
             color: Colors.black,
@@ -155,7 +207,8 @@ class _HomePageViewState extends State<HomePageView> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                weatherStore.weather?.list.first.main.temp.toStringAsFixed(1) ??
+                widget.weatherStore.weather?.list.first.main.temp
+                        .toStringAsFixed(1) ??
                     "",
                 style: theme.textTheme.displayLarge,
               ),
@@ -189,7 +242,7 @@ class _HomePageViewState extends State<HomePageView> {
                 padding: const EdgeInsets.all(10.0),
                 child: CustomText(
                   text:
-                      "Feels Like: ${weatherStore.weather?.list.first.main.feelsLike.toStringAsFixed(1)}˚",
+                      "Feels Like: ${widget.weatherStore.weather?.list.first.main.feelsLike.toStringAsFixed(1)}˚",
                   fontSize: 13,
                   height: 0.12,
                   fontWeight: FontWeight.w500,
@@ -229,12 +282,12 @@ class _HomePageViewState extends State<HomePageView> {
               CustomContainer(
                 text: "Min",
                 info:
-                    "${weatherStore.weather?.list.first.main.tempMin.toString()}˚",
+                    "${widget.weatherStore.weather?.list.first.main.tempMin.toString()}˚",
               ),
               CustomContainer(
                 text: "Max",
                 info:
-                    "${weatherStore.weather?.list.first.main.tempMax.toString()}˚",
+                    "${widget.weatherStore.weather?.list.first.main.tempMax.toString()}˚",
               ),
             ],
           ),
@@ -248,12 +301,12 @@ class _HomePageViewState extends State<HomePageView> {
               CustomContainer(
                 text: "Humidity",
                 info:
-                    "${weatherStore.weather?.list.first.main.humidity.toString()}%",
+                    "${widget.weatherStore.weather?.list.first.main.humidity.toString()}%",
               ),
               CustomContainer(
                 text: "Wind",
                 info:
-                    "${weatherStore.weather?.list.first.wind.speed.toString()} Km/h",
+                    "${widget.weatherStore.weather?.list.first.wind.speed.toString()} Km/h",
               ),
             ],
           ),

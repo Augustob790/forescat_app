@@ -1,3 +1,5 @@
+import 'package:image_picker/image_picker.dart';
+
 import '../const/image_constant.dart';
 import 'package:intl/intl.dart';
 
@@ -99,6 +101,14 @@ class Helpers {
         return "Sunday";
       default:
         return "";
+    }
+  }
+
+  static  pickImage(ImageSource source) async {
+    final ImagePicker picker = ImagePicker();
+    XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      return image.readAsBytes();
     }
   }
 
