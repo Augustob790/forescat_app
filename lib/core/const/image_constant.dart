@@ -40,4 +40,8 @@ class ImageConstant {
   static String imgGroup88 = '$imagePath/img_group88.png';
 
   static String imageNotFound = 'assets/images/image_not_found.png';
+
+  static String profile = '$imagePath/profile.png';
+
+  static String profileNet = "https://icons.veryicon.com/png/o/miscellaneous/rookie-official-icon-gallery/225-default-avatar.png";
 }

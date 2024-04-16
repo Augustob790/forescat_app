@@ -37,7 +37,7 @@ class _HomePageViewState extends State<HomePageView> {
   @override
   void initState() {
     super.initState();
-    inicialize();
+    widget.weatherStore.inicialize();
   }
 
   inicialize() async {
@@ -53,7 +53,7 @@ class _HomePageViewState extends State<HomePageView> {
       appBar: CustomAppBar(
         weatherStore: widget.weatherStore,
         onPressed: () async {
-          inicialize();
+          widget.weatherStore.refresh();
         },
       ),
       drawer: CustomDrawer(

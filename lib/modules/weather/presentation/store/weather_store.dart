@@ -42,6 +42,19 @@ abstract class _WeatherStoreBase with Store {
   dynamic isLoading;
 
   @action
+  inicialize() async {
+    await getCurrentCity();
+    await getCityWeather(city);
+    await getAllWeather(city);
+  }
+
+  @action
+  refresh() async {
+    await inicialize();
+    NotificationsManager().showNotification(title: "Atualização", body: "Previsão do tempo atualizada!");
+  }
+
+  @action
   Future<WeatherForecast> getAllWeather(String cityName) async {
     isLoading = "isLoading";
     try {
@@ -61,7 +74,8 @@ abstract class _WeatherStoreBase with Store {
     final String? storedWeather = preferences.getString('storedWeather');
     final String newWeather = weather!.list.first.main.temp.toString();
     if (storedWeather != newWeather) {
-      NotificationsManager().showNotification(title: "Atualização", body: "Houve mudanças no clima/tempo!");
+      NotificationsManager().showNotification(
+          title: "Atualização", body: "Houve mudanças no clima/tempo!");
       await preferences.setString('storedWeather', newWeather);
     }
   }

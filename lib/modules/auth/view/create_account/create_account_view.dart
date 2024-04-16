@@ -90,10 +90,10 @@ class _SignPageViewState extends State<SignPageView> {
                             backgroundImage:
                                 MemoryImage(widget.authStore.images!),
                           )
-                        : const CircleAvatar(
+                        : CircleAvatar(
                             radius: 64,
-                            backgroundImage: NetworkImage(
-                                'https://icons.veryicon.com/png/o/miscellaneous/rookie-official-icon-gallery/225-default-avatar.png'),
+                            backgroundImage:
+                                NetworkImage(ImageConstant.profileNet),
                           ),
                     Positioned(
                         bottom: -10,
