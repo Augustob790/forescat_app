@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "315676606659",
+    "project_id": "forecast-16020",
+    "storage_bucket": "forecast-16020.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:315676606659:android:3137a6ed0e45e07158e276",
+        "android_client_info": {
+          "package_name": "com.example.forecast_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "315676606659-k4a9tbe48464l47vq22vl73vkrfo3s7a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.forecast_app",
+            "certificate_hash": "c5fd3a1fef54cf677110b734aaa6a2759eeda3b0"
+          }
+        },
+        {
+          "client_id": "315676606659-ejpqbnfentcbsn13aq5ubkint5l6rlt8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBt8_S_m9Z9VkrGa6dJTumrB44QRmDEkCg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "315676606659-ejpqbnfentcbsn13aq5ubkint5l6rlt8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "315676606659-s1ecfmrci463nrudlnhug95t5rorgn2k.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.forecastApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -10,7 +10,7 @@ import 'modules/domain/usecases/get_city_use_cases.dart';
 import 'modules/domain/usecases/get_current_city_use_cases.dart';
 import 'modules/presentation/home_page_view_model.dart';
 import 'modules/presentation/store/weather_store.dart';
-import 'modules/view/auth/sign_view.dart';
+import 'modules/view/auth/create_account_view.dart';
 import 'modules/view/home/home_page_view.dart';
 import 'modules/view/auth/login_view.dart';
 

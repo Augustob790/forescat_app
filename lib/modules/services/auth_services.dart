@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthException implements Exception {
   String message;
@@ -26,6 +27,18 @@ class AuthService extends ChangeNotifier {
   getUser() {
     usuario = _auth.currentUser;
     notifyListeners();
+  }
+
+  signInWithGoogle() async {
+    final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
+    final GoogleSignInAuthentication gAuth = await gUser!.authentication;
+
+    final credential = GoogleAuthProvider.credential(
+      accessToken: gAuth.accessToken,
+      idToken: gAuth.idToken,
+    );
+
+    return await _auth.signInWithCredential(credential);
   }
 
   registrar(String email, String senha) async {
@@ -56,6 +69,7 @@ class AuthService extends ChangeNotifier {
 
   logout() async {
     await _auth.signOut();
+    await GoogleSignIn().signOut();
     getUser();
   }
 }

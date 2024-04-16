@@ -31,7 +31,7 @@ class _SignPageViewState extends State<SignPageView> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: const Text(
-          'Sign',
+          'Create Account',
           style: TextStyle(
             color: Colors.white,
             fontSize: 18,
@@ -92,8 +92,8 @@ class _SignPageViewState extends State<SignPageView> {
                   const Padding(
                     padding: EdgeInsets.all(20.0),
                     child: CustomText(
-                      text: "Crie sua conta",
-                      fontSize: 35,
+                      text: "Create your account",
+                      fontSize: 25,
                       height: 0.08,
                       fontWeight: FontWeight.w600,
                     ),
@@ -148,7 +148,7 @@ class _SignPageViewState extends State<SignPageView> {
                       },
                       color: const Color(0xFF947CCD),
                       isLoading: true,
-                      text: "Cadastrar",
+                      text: "Create",
                       height: 40,
                       width: 200),
                 ],

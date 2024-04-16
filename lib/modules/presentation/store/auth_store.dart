@@ -48,6 +48,19 @@ abstract class _AuthStore with Store {
   }
 
   @action
+  Future<void> loginGoogle() async {
+    isLoading = "isLoading";
+    try {
+      await auth.signInWithGoogle();
+      Modular.to.pushReplacementNamed('/home');
+      isLoading = "sucess";
+    } catch (e) {
+      isLoading = "error";
+      throw e.toString();
+    }
+  }
+
+  @action
   Future<void> registrar(String email, String senha) async {
     isLoading = "isLoading";
     try {

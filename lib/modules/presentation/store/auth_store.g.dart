@@ -81,6 +81,14 @@ mixin _$AuthStore on _AuthStore, Store {
     return _$loginAsyncAction.run(() => super.login(email, senha));
   }
 
+  late final _$loginGoogleAsyncAction =
+      AsyncAction('_AuthStore.loginGoogle', context: context);
+
+  @override
+  Future<void> loginGoogle() {
+    return _$loginGoogleAsyncAction.run(() => super.loginGoogle());
+  }
+
   late final _$registrarAsyncAction =
       AsyncAction('_AuthStore.registrar', context: context);
 
