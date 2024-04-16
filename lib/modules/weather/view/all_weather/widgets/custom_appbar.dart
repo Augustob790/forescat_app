@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-
 import '../../../../../core/helpers/theme_helper.dart';
 import '../../../../../core/widgets/custom_text.dart';
 
@@ -25,15 +23,13 @@ class CustomAppBarAll extends StatelessWidget implements PreferredSizeWidget {
         color: Colors.white, // Cor do ícone
       ),
       elevation: 0,
-      title: Observer(builder: (context) {
-        return const CustomText(
-          text: 'Next 5 days',
-          color: Colors.white,
-          fontSize: 18,
-          height: 0.10,
-          fontWeight: FontWeight.w600,
-        );
-      }),
+      title: const CustomText(
+        text: 'Next 5 days',
+        color: Colors.white,
+        fontSize: 18,
+        height: 0.10,
+        fontWeight: FontWeight.w600,
+      ),
       actions: [
         IconButton(
           onPressed: onPressed,
