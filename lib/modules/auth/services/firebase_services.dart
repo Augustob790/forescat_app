@@ -6,11 +6,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../domain/models/user_model.dart';
 
-class AuthException implements Exception {
-  String message;
-  AuthException(this.message);
-}
-
 class FirebaseAuthService {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore fire = FirebaseFirestore.instance;
@@ -42,7 +37,6 @@ class FirebaseAuthService {
     usuario = auth.currentUser;
   }
 
-//levar usuario para a home page;
   Future<UserModel> getUserFire() async {
     DocumentSnapshot snap =
         await fire.collection("users").doc(usuario?.uid).get();
@@ -88,9 +82,9 @@ class FirebaseAuthService {
       await fire.collection("users").doc(response.user!.uid).set(user.toJson());
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        throw AuthException('A senha é muito fraca!');
+        throw ('A senha é muito fraca!');
       } else if (e.code == 'email-already-in-use') {
-        throw AuthException('Este email já está cadastrado');
+        throw ('Este email já está cadastrado');
       }
     }
   }
@@ -101,9 +95,9 @@ class FirebaseAuthService {
       getUser();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        throw AuthException('Email não encontrado. Cadastre-se.');
-      } else if (e.code == 'wrong-password') {
-        throw AuthException('Senha incorreta. Tente novamente');
+        throw ('Email não encontrado. Cadastre-se.');
+      } else if (e.code == 'invalid-credential') {
+        throw ('Senha incorreta!');
       }
     }
   }

@@ -24,8 +24,8 @@ class WeatherModule extends Module {
 
   @override
   void routes(RouteManager r) {
-    r.child("/home", child: (_) =>  HomePageView(authStore: Modular.get(), weatherStore: Modular.get()));
-    r.child("/five_days", child: (_) => const AllWeatherView());
+    r.child("/home", child: (_) =>  HomePageView(authStore: Modular.get(), weatherStore: Modular.get(), service: Modular.get()));
+    r.child("/five_days", child: (_) =>  AllWeatherView(weatherStore: Modular.get()));
     super.routes(r);
   }
 }

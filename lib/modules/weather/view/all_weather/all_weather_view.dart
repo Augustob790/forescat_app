@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import '../../../../core/const/image_constant.dart';
 import '../../../../core/helpers/helpers.dart';
 import '../../../../core/helpers/theme_helper.dart';
+import '../../../../core/widgets/get_error_ui.dart';
+import '../../../../core/widgets/load_ui.dart';
+import 'widgets/custom_appbar.dart';
 import 'widgets/custom_container_all.dart';
 import '../../../../core/widgets/custom_text.dart';
 
@@ -13,57 +15,41 @@ import 'widgets/custom_container.dart';
 class AllWeatherView extends StatefulWidget {
   const AllWeatherView({
     super.key,
+    required this.weatherStore,
   });
+
+  final WeatherStore weatherStore;
 
   @override
   State<AllWeatherView> createState() => _AllWeatherViewState();
 }
 
 class _AllWeatherViewState extends State<AllWeatherView> {
-  final weatherStore = Modular.get<WeatherStore>();
+  inicialize() async {
+    await widget.weatherStore.getCurrentCity();
+    await widget.weatherStore.getAllWeather(widget.weatherStore.city);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: const Alignment(0.5, 0.5),
-              end: const Alignment(0.5, 2.5),
-              colors: [appTheme.indigo900, appTheme.blueGray700],
-            ),
-          ),
-        ),
-        elevation: 0,
-        title: const Text(
-          'Next 5 days',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          padding: const EdgeInsets.all(0),
-          icon: const SizedBox(
-            width: 40,
-            height: 40,
-            child: Icon(
-              Icons.arrow_back_ios_new,
-              color: Colors.white,
-            ),
-          ),
-        ),
+      appBar: CustomAppBarAll(
+        onPressed: () {
+          inicialize();
+        },
       ),
       body: Observer(
         builder: (context) {
-          return getBodyUI();
+          if (widget.weatherStore.isLoading == "isLoading") {
+            return const LoadUi();
+          } else if (widget.weatherStore.errorMessage == "error") {
+            return const GetErrorUi(error: "Error");
+          } else if (widget.weatherStore.weather != null &&
+              widget.weatherStore.isLoading == "sucess") {
+            return getBodyUI();
+          } else {
+            return const LoadUi();
+          }
         },
       ),
     );
@@ -90,7 +76,7 @@ class _AllWeatherViewState extends State<AllWeatherView> {
             margin: const EdgeInsets.all(20),
             child: CustomText(
               text: Helpers.convertToWeekday(
-                  weatherStore.forecast!.list.first.date),
+                  widget.weatherStore.forecast!.list.first.date),
               fontSize: 18.35,
               height: 0.08,
               fontWeight: FontWeight.w600,
@@ -98,14 +84,14 @@ class _AllWeatherViewState extends State<AllWeatherView> {
           ),
           Padding(
             padding: const EdgeInsets.all(20.0),
-            child: CustomContainer(list: weatherStore.forecast!.list),
+            child: CustomContainer(list: widget.weatherStore.forecast!.list),
           ),
           Expanded(
             child: ListView.builder(
                 padding: const EdgeInsets.only(top: 30),
-                itemCount: weatherStore.forecast?.list.length,
+                itemCount: widget.weatherStore.forecast?.list.length,
                 itemBuilder: (context, index) {
-                  final asx = weatherStore.forecast?.list[index];
+                  final asx = widget.weatherStore.forecast?.list[index];
                   return CustomContainerAll(
                     weekDay: Helpers.convertToWeekday(asx?.date ?? ""),
                     imageWeather: asx?.weather.first.main ?? "c",

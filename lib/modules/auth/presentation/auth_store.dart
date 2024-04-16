@@ -40,6 +40,13 @@ abstract class _AuthStore with Store {
   Uint8List? images;
 
   @action
+  dispose() async {
+    emailController.clear();
+    passwordController.clear();
+    images?.clear();
+  }
+
+  @action
   logout() async {
     await service.logout();
     Modular.to.pushReplacementNamed('/auth/login');
@@ -61,7 +68,6 @@ abstract class _AuthStore with Store {
     isLoading = "isLoading";
     try {
       await service.login(email, senha);
-      Modular.to.pushReplacementNamed('/weather/home');
       isLoading = "sucess";
     } catch (e) {
       isLoading = "error";
@@ -88,7 +94,6 @@ abstract class _AuthStore with Store {
     isLoading = "isLoading";
     try {
       await service.registrar(email, senha, images!, "");
-      Modular.to.pushReplacementNamed('/weather/home');
       getUserFire();
       isLoading = "sucess";
     } catch (e) {

@@ -3,30 +3,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:forecast_app/modules/weather/view/home/widget/custom_appbar.dart';
 import '../../../../core/const/image_constant.dart';
+import '../../../../core/widgets/get_error_ui.dart';
+import '../../../../core/widgets/load_ui.dart';
 import '../../../auth/presentation/auth_store.dart';
 import '../../../auth/services/firebase_services.dart';
 import 'widget/custom_container.dart';
 import '../../../../core/widgets/custom_text.dart';
-import '../../../../core/widgets/get_error_ui.dart';
-import '../../../../core/widgets/load_ui.dart';
 import '../../presentation/store/weather_store.dart';
 import '../../../../core/widgets/custom_image_view.dart';
 import '../../../../core/helpers/helpers.dart';
 import '../../../../core/helpers/theme_helper.dart';
+import 'widget/custom_drawer.dart';
 
 class HomePageView extends StatefulWidget {
   const HomePageView(
-      {super.key, required this.weatherStore, required this.authStore});
+      {super.key,
+      required this.weatherStore,
+      required this.authStore,
+      required this.service});
 
   final WeatherStore weatherStore;
   final AuthStore authStore;
+  final FirebaseAuthService service;
 
   @override
   State<HomePageView> createState() => _HomePageViewState();
 }
-
-final service = Modular.get<FirebaseAuthService>();
 
 class _HomePageViewState extends State<HomePageView> {
   @override
@@ -44,106 +48,16 @@ class _HomePageViewState extends State<HomePageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: const Alignment(0.5, 0.5),
-              end: const Alignment(0.5, 2.5),
-              colors: [appTheme.indigo900, appTheme.blueGray700],
-            ),
-          ),
-        ),
-        iconTheme: IconThemeData(
-          color: Colors.white, // Cor do ícone
-        ),
-        elevation: 0,
-        title: Observer(builder: (context) {
-          return CustomText(
-            text: widget.weatherStore.weather?.city.name ?? "",
-            color: Colors.white,
-            fontSize: 18,
-            height: 0.10,
-            fontWeight: FontWeight.w600,
-          );
-        }),
-        actions: [
-          IconButton(
-            onPressed: () {
-              inicialize();
-            },
-            padding: const EdgeInsets.all(0),
-            icon: const SizedBox(
-              width: 40,
-              height: 40,
-              child: Icon(
-                Icons.refresh,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-        centerTitle: true,
+      appBar: CustomAppBar(
+        weatherStore: widget.weatherStore,
+        onPressed: () {
+          inicialize();
+        },
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: const Alignment(0.5, 0),
-                    end: const Alignment(0.5, 1),
-                    colors: [
-                      appTheme.indigo90001,
-                      appTheme.indigo900,
-                    ]),
-                image: DecorationImage(
-                    opacity: 0.2,
-                    image: AssetImage(ImageConstant.imgGroup88),
-                    fit: BoxFit.cover),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundImage: NetworkImage(
-                        widget.authStore.userModel?.photoImage == null
-                            ? service.usuario?.photoURL ?? ""
-                            : widget.authStore.userModel?.photoImage ?? ""),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    widget.authStore.userModel?.email == null
-                        ? service.usuario?.email ?? ""
-                        : widget.authStore.userModel?.email ?? "",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            ListTile(
-              trailing: IconButton(
-                onPressed: () {
-                  widget.authStore.logout();
-                },
-                icon: Icon(
-                  Icons.exit_to_app,
-                  color: Colors.black,
-                ),
-              ),
-              title: Text('Sair'),
-              onTap: () {
-                widget.authStore.logout();
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: CustomDrawer(
+          service: widget.service,
+          weatherStore: widget.weatherStore,
+          authStore: widget.authStore),
       body: Center(
         child: Observer(
           builder: (context) {

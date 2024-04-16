@@ -103,6 +103,14 @@ mixin _$AuthStore on _AuthStore, Store {
     });
   }
 
+  late final _$disposeAsyncAction =
+      AsyncAction('_AuthStore.dispose', context: context);
+
+  @override
+  Future dispose() {
+    return _$disposeAsyncAction.run(() => super.dispose());
+  }
+
   late final _$logoutAsyncAction =
       AsyncAction('_AuthStore.logout', context: context);
 

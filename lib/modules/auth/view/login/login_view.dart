@@ -6,6 +6,7 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 import '../../../../core/const/image_constant.dart';
 import '../../../../core/helpers/helpers.dart';
+import '../../../../core/helpers/scaffold_mensseger_ui.dart';
 import '../../../../core/helpers/theme_helper.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_image_view.dart';
@@ -23,8 +24,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
-
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -117,10 +116,20 @@ class _LoginPageState extends State<LoginPage> {
                     Padding(
                       padding: const EdgeInsets.all(15.0),
                       child: CustomButtonStandard(
-                        onTap: () {
+                        onTap: () async {
                           if (widget.authStore.loginFormKey.currentState!.validate()) {
-                            widget.authStore.login(widget.authStore.emailController.text,
-                                widget.authStore.passwordController.text);
+                            try {
+                              await widget.authStore.login(
+                                  widget.authStore.emailController.text,
+                                  widget.authStore.passwordController.text);
+                              Modular.to.pushReplacementNamed('/weather/home');
+                              widget.authStore.dispose();
+                            } catch (e) {
+                              MessagesUi().snackE(context, e.toString());
+                            }
+                          } else {
+                            MessagesUi()
+                                .snackE(context, "Prencha todos os campos!");
                           }
                         },
                         color: const Color(0xFF947CCD),
@@ -162,8 +171,8 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.all(10.0),
                       child: SignInButton(
                         Buttons.Google,
-                        onPressed: () {
-                          widget.authStore.loginGoogle();
+                        onPressed: () async{
+                          await widget.authStore.loginGoogle();
                         },
                       ),
                     ),
@@ -178,6 +187,7 @@ class _LoginPageState extends State<LoginPage> {
                         TextButton(
                           onPressed: () {
                             Modular.to.pushNamed('/auth/sign');
+                            widget.authStore.dispose();
                           },
                           child: const CustomText(
                             text: 'Register now',
