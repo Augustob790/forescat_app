@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.all(15.0),
                       child: CustomButtonStandard(
                         onTap: () {
                           if (auth.loginFormKey.currentState!.validate()) {
@@ -129,25 +129,31 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: CustomButtonStandard(
-                        onTap: () {
-                          Modular.to.pushNamed('/auth/sign');
-                        },
-                        color: const Color(0xFF947CCD),
-                        isLoading: true,
-                        text: "Create Account",
-                        height: 40,
-                        width: size.width / 1.15,
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.all(15.0),
-                      child: CustomText(
-                        text: "or Sign in with",
-                        fontSize: 12,
-                        height: 0.08,
-                        fontWeight: FontWeight.w600,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 25.0, vertical: 10),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Divider(
+                              thickness: 0.5,
+                              color: Colors.grey[400],
+                            ),
+                          ),
+                          const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10.0),
+                              child: CustomText(
+                                text: "Or Sign in with",
+                                fontSize: 12,
+                                height: 0.08,
+                                fontWeight: FontWeight.w600,
+                              )),
+                          Expanded(
+                            child: Divider(
+                              thickness: 0.5,
+                              color: Colors.grey[400],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     Padding(
@@ -158,6 +164,28 @@ class _LoginPageState extends State<LoginPage> {
                           auth.loginGoogle();
                         },
                       ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Not a member?',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        const SizedBox(width: 4),
+                        TextButton(
+                          onPressed: () {
+                            Modular.to.pushNamed('/auth/sign');
+                          },
+                          child: const CustomText(
+                            text: 'Register now',
+                            fontSize: 14,
+                            color: Colors.blue,
+                            height: 0.08,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

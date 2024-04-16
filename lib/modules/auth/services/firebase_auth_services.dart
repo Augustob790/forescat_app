@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -8,13 +9,20 @@ class AuthException implements Exception {
 
 class FirebaseAuthService {
   FirebaseAuth auth = FirebaseAuth.instance;
-
+  FirebaseFirestore fire = FirebaseFirestore.instance;
 
   User? usuario;
   bool isLoading = true;
 
-  FirebaseAuthService(){
+  FirebaseAuthService() {
     authCheck();
+  }
+
+  addUserDetails(String email, String senha) async {
+    await fire.collection("users").add({
+      "email": email,
+      "senha": senha,    
+    });
   }
 
   authCheck() {
@@ -44,6 +52,7 @@ class FirebaseAuthService {
     try {
       await auth.createUserWithEmailAndPassword(email: email, password: senha);
       getUser();
+      addUserDetails(email, senha);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         throw AuthException('A senha é muito fraca!');

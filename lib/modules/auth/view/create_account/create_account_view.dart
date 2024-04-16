@@ -1,7 +1,11 @@
 // ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:forecast_app/core/widgets/custom_button.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/const/image_constant.dart';
 import '../../../../core/helpers/helpers.dart';
@@ -20,6 +24,31 @@ class SignPageView extends StatefulWidget {
 
 class _SignPageViewState extends State<SignPageView> {
   final auth = Modular.get<AuthStore>();
+
+  final FirebaseStorage storage = FirebaseStorage.instance;
+
+  Future<XFile?> getImage() async {
+    final ImagePicker picker = ImagePicker();
+    XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    return image;
+  }
+
+  Future<void> upload(String path) async {
+    File file = File(path);
+    try {
+      String ref = "images/img-${DateTime.now().toString()}.jpg";
+      await storage.ref(ref).putFile(file);
+    } on FirebaseException catch (e) {
+      throw Exception("Erro no upload: ${e.code}");
+    }
+  }
+
+  pickUploadImage() async {
+    XFile? file = await getImage();
+    if (file != null) {
+      await upload(file.path);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +147,7 @@ class _SignPageViewState extends State<SignPageView> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(10),
                     child: InputPersonalized(
                       controller: auth.passwordController,
                       labelText: 'Password',
@@ -139,18 +168,33 @@ class _SignPageViewState extends State<SignPageView> {
                       fontSize: 12,
                     ),
                   ),
-                  CustomButtonStandard(
-                      onTap: () {
-                        if (auth.signFormKey.currentState!.validate()) {
-                          auth.registrar(auth.emailController.text,
-                              auth.passwordController.text);
-                        }
-                      },
-                      color: const Color(0xFF947CCD),
-                      isLoading: true,
-                      text: "Create",
-                      height: 40,
-                      width: 200),
+                  Padding(
+                    padding: const EdgeInsets.all(30.0),
+                    child: CustomButtonStandard(
+                        onTap: () {
+                          if (auth.signFormKey.currentState!.validate()) {
+                            auth.registrar(auth.emailController.text,
+                                auth.passwordController.text);
+                          }
+                        },
+                        color: const Color(0xFF947CCD),
+                        isLoading: true,
+                        text: "Sign Up",
+                        height: 40,
+                        width: size.width / 1.15),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(30.0),
+                    child: CustomButtonStandard(
+                        onTap: () {
+                          pickUploadImage();
+                        },
+                        color: const Color(0xFF947CCD),
+                        isLoading: true,
+                        text: "Sign Up",
+                        height: 40,
+                        width: size.width / 1.15),
+                  ),
                 ],
               ),
             ),

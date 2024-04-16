@@ -65,6 +65,7 @@ abstract class _AuthStore with Store {
     isLoading = "isLoading";
     try {
       await auth.registrar(email, senha);
+
       Modular.to.pushReplacementNamed('/weather/home');
       isLoading = "sucess";
     } catch (e) {
