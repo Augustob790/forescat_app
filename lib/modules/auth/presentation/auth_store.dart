@@ -49,6 +49,7 @@ abstract class _AuthStore with Store {
   @action
   logout() async {
     await service.logout();
+    dispose();
     Modular.to.pushReplacementNamed('/auth/login');
   }
 
