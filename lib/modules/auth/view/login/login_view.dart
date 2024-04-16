@@ -176,6 +176,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: SignInButton(
                           Buttons.Google,
                           onPressed: () async {
+                            widget.authStore.dispose();
                             await widget.authStore.loginGoogle();
                           },
                         ),

@@ -1,14 +1,13 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-import '../const/image_constant.dart';
 
 class NotificationsManager {
-   FlutterLocalNotificationsPlugin notificationsPlugin =
+  FlutterLocalNotificationsPlugin notificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
   Future<void> initNotification() async {
     AndroidInitializationSettings initializationSettingsAndroid =
-        const AndroidInitializationSettings('flutter_logo');
+        const AndroidInitializationSettings('@mipmap/ic_launcher');
 
     DarwinInitializationSettings initializationSettingsiOS =
         DarwinInitializationSettings(
@@ -23,24 +22,39 @@ class NotificationsManager {
       iOS: initializationSettingsiOS,
     );
 
-
     await notificationsPlugin.initialize(initializationSettings,
-        onDidReceiveNotificationResponse: (details) {});
+        onDidReceiveNotificationResponse: (details) async {});
   }
 
-  Future<void> simpleNotification() async {
-    AndroidNotificationDetails android = AndroidNotificationDetails(
-      'channelId',
-      'channelName',
+  notificationsDetails() {
+    return const NotificationDetails(
+      android: AndroidNotificationDetails('channelId', 'channelName',
       priority: Priority.high,
       importance: Importance.max,
-      icon: ImageConstant.imgDownload1,
-      largeIcon: DrawableResourceAndroidBitmap(ImageConstant.imgDownload1),
+      ticker: 'ticker',
+    ),
+      iOS: DarwinNotificationDetails(),
     );
-
-    NotificationDetails notificationDetails = NotificationDetails(
-      android: android,
-    );
-    await notificationsPlugin.show(0, "teste", "teste", notificationDetails);
   }
+
+  Future<void> showNotification(
+      {int id = 0, String? title, String? body, String? payload}) {
+    return notificationsPlugin.show(id, title, body, notificationsDetails());
+  }
+
+  // Future<void> simpleNotification() async {
+  //   AndroidNotificationDetails android = AndroidNotificationDetails(
+  //     'channelId',
+  //     'channelName',
+  //     priority: Priority.high,
+  //     importance: Importance.max,
+  //     icon: ImageConstant.imgDownload1,
+  //     largeIcon: DrawableResourceAndroidBitmap(ImageConstant.imgDownload1),
+  //   );
+
+  //   NotificationDetails notificationDetails = NotificationDetails(
+  //     android: android,
+  //   );
+  //   await notificationsPlugin.show(0, "teste", "teste", notificationDetails);
+  // }
 }

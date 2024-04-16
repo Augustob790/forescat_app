@@ -4,7 +4,7 @@ import '../../../../../core/const/app_decoration.dart';
 import '../../../../../core/helpers/helpers.dart';
 import '../../../../../core/helpers/theme_helper.dart';
 import '../../../../../core/widgets/custom_image_view.dart';
-import '../../../domain/model/weather_forecast_model.dart';
+import '../../../domain/model/weather_data.dart';
 
 class CustomContainer extends StatelessWidget {
   const CustomContainer({super.key, required this.list});

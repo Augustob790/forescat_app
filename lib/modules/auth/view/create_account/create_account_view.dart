@@ -62,7 +62,7 @@ class _SignPageViewState extends State<SignPageView> {
       ),
       body: Observer(builder: (context) {
         return Container(
-        height: size.height,
+          height: size.height,
           decoration: BoxDecoration(
             gradient: LinearGradient(
                 begin: const Alignment(0.5, 0),
@@ -177,6 +177,7 @@ class _SignPageViewState extends State<SignPageView> {
                                       "");
                                   Modular.to
                                       .pushReplacementNamed('/weather/home');
+                                  widget.authStore.dispose();
                                 } catch (e) {
                                   MessagesUi().snackE(context, e.toString());
                                 }
