@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthException implements Exception {
@@ -7,26 +6,26 @@ class AuthException implements Exception {
   AuthException(this.message);
 }
 
-class AuthService extends ChangeNotifier {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+class FirebaseAuthService {
+  FirebaseAuth auth = FirebaseAuth.instance;
+
+
   User? usuario;
   bool isLoading = true;
 
-  AuthService() {
+  FirebaseAuthService(){
     authCheck();
   }
 
   authCheck() {
-    _auth.authStateChanges().listen((User? user) {
+    auth.authStateChanges().listen((User? user) {
       usuario = (user == null) ? null : user;
       isLoading = false;
-      notifyListeners();
     });
   }
 
   getUser() {
-    usuario = _auth.currentUser;
-    notifyListeners();
+    usuario = auth.currentUser;
   }
 
   signInWithGoogle() async {
@@ -38,12 +37,12 @@ class AuthService extends ChangeNotifier {
       idToken: gAuth.idToken,
     );
 
-    return await _auth.signInWithCredential(credential);
+    return await auth.signInWithCredential(credential);
   }
 
   registrar(String email, String senha) async {
     try {
-      await _auth.createUserWithEmailAndPassword(email: email, password: senha);
+      await auth.createUserWithEmailAndPassword(email: email, password: senha);
       getUser();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -56,7 +55,7 @@ class AuthService extends ChangeNotifier {
 
   login(String email, String senha) async {
     try {
-      await _auth.signInWithEmailAndPassword(email: email, password: senha);
+      await auth.signInWithEmailAndPassword(email: email, password: senha);
       getUser();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -68,7 +67,7 @@ class AuthService extends ChangeNotifier {
   }
 
   logout() async {
-    await _auth.signOut();
+    await auth.signOut();
     await GoogleSignIn().signOut();
     getUser();
   }

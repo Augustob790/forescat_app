@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 
-import '../../services/auth_services.dart';
+import '../services/firebase_auth_services.dart';
 
 part "auth_store.g.dart";
 
 class AuthStore = _AuthStore with _$AuthStore;
 
 abstract class _AuthStore with Store {
-  final auth = Modular.get<AuthService>();
+  final auth = Modular.get<FirebaseAuthService>();
   final loginFormKey = GlobalKey<FormState>();
   final signFormKey = GlobalKey<FormState>();
 
@@ -39,7 +39,7 @@ abstract class _AuthStore with Store {
     isLoading = "isLoading";
     try {
       await auth.login(email, senha);
-      Modular.to.pushReplacementNamed('/home');
+      Modular.to.pushReplacementNamed('/weather/home');
       isLoading = "sucess";
     } catch (e) {
       isLoading = "error";
@@ -52,7 +52,7 @@ abstract class _AuthStore with Store {
     isLoading = "isLoading";
     try {
       await auth.signInWithGoogle();
-      Modular.to.pushReplacementNamed('/home');
+      Modular.to.pushReplacementNamed('/weather/home');
       isLoading = "sucess";
     } catch (e) {
       isLoading = "error";
@@ -65,7 +65,7 @@ abstract class _AuthStore with Store {
     isLoading = "isLoading";
     try {
       await auth.registrar(email, senha);
-      Modular.to.pushReplacementNamed('/home');
+      Modular.to.pushReplacementNamed('/weather/home');
       isLoading = "sucess";
     } catch (e) {
       isLoading = "error";

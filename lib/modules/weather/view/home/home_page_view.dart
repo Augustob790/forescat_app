@@ -3,16 +3,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:forecast_app/modules/services/auth_services.dart';
-import '../../../core/const/image_constant.dart';
+import 'package:forecast_app/modules/auth/services/firebase_auth_services.dart';
+import '../../../../core/const/image_constant.dart';
 import 'widget/custom_container.dart';
-import '../../../core/widgets/custom_text.dart';
-import '../../../core/widgets/get_error_ui.dart';
-import '../../../core/widgets/load_ui.dart';
+import '../../../../core/widgets/custom_text.dart';
+import '../../../../core/widgets/get_error_ui.dart';
+import '../../../../core/widgets/load_ui.dart';
 import '../../presentation/store/weather_store.dart';
-import '../../../core/widgets/custom_image_view.dart';
-import '../../../core/helpers/helpers.dart';
-import '../../../core/helpers/theme_helper.dart';
+import '../../../../core/widgets/custom_image_view.dart';
+import '../../../../core/helpers/helpers.dart';
+import '../../../../core/helpers/theme_helper.dart';
 
 class HomePageView extends StatefulWidget {
   const HomePageView({super.key});
@@ -23,7 +23,7 @@ class HomePageView extends StatefulWidget {
 
 class _HomePageViewState extends State<HomePageView> {
   late final WeatherStore weatherStore;
-  final auth = Modular.get<AuthService>();
+  final auth = Modular.get<FirebaseAuthService>();
   String city = " ";
 
   @override
@@ -50,7 +50,7 @@ class _HomePageViewState extends State<HomePageView> {
         leading: IconButton(
           onPressed: () {
             auth.logout();
-            Modular.to.pushReplacementNamed('/login');
+            Modular.to.pushReplacementNamed('/auth/login');
           },
           icon: Icon(
             Icons.exit_to_app,
@@ -208,7 +208,7 @@ class _HomePageViewState extends State<HomePageView> {
                 padding: EdgeInsets.all(20.0),
                 child: TextButton(
                   onPressed: () {
-                    Modular.to.pushNamed("/five_days");
+                    Modular.to.pushNamed("/weather/five_days");
                   },
                   child: CustomText(
                     text: "Next 5 days > ",

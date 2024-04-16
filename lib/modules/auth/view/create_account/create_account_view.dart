@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:forecast_app/core/widgets/custom_button.dart';
 
-import '../../../core/const/image_constant.dart';
-import '../../../core/helpers/helpers.dart';
-import '../../../core/helpers/theme_helper.dart';
-import '../../../core/widgets/custom_image_view.dart';
-import '../../../core/widgets/custom_text.dart';
-import '../../../core/widgets/input_personalized.dart';
-import '../../presentation/store/auth_store.dart';
+import '../../../../core/const/image_constant.dart';
+import '../../../../core/helpers/helpers.dart';
+import '../../../../core/helpers/theme_helper.dart';
+import '../../../../core/widgets/custom_image_view.dart';
+import '../../../../core/widgets/custom_text.dart';
+import '../../../../core/widgets/input_personalized.dart';
+import '../../presentation/auth_store.dart';
 
 class SignPageView extends StatefulWidget {
   const SignPageView({super.key});

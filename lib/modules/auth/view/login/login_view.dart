@@ -4,14 +4,14 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 
-import '../../../core/const/image_constant.dart';
-import '../../../core/helpers/helpers.dart';
-import '../../../core/helpers/theme_helper.dart';
-import '../../../core/widgets/custom_button.dart';
-import '../../../core/widgets/custom_image_view.dart';
-import '../../../core/widgets/custom_text.dart';
-import '../../../core/widgets/input_personalized.dart';
-import '../../presentation/store/auth_store.dart';
+import '../../../../core/const/image_constant.dart';
+import '../../../../core/helpers/helpers.dart';
+import '../../../../core/helpers/theme_helper.dart';
+import '../../../../core/widgets/custom_button.dart';
+import '../../../../core/widgets/custom_image_view.dart';
+import '../../../../core/widgets/custom_text.dart';
+import '../../../../core/widgets/input_personalized.dart';
+import '../../presentation/auth_store.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -132,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.all(5.0),
                       child: CustomButtonStandard(
                         onTap: () {
-                          Modular.to.pushNamed('/sign');
+                          Modular.to.pushNamed('/auth/sign');
                         },
                         color: const Color(0xFF947CCD),
                         isLoading: true,

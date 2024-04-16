@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import '../../../core/const/api.dart';
+import '../../../../core/const/api.dart';
 import '../../domain/model/weather_forecast_model.dart';
 
 abstract class WeatherRepository {

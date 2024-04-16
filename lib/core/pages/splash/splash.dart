@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:forecast_app/core/const/api.dart';
 
-import '../../../core/const/image_constant.dart';
-import '../../../core/helpers/helpers.dart';
-import '../../../core/helpers/theme_helper.dart';
-import '../../../core/widgets/custom_image_view.dart';
-import '../../services/auth_services.dart';
+import '../../const/image_constant.dart';
+import '../../helpers/helpers.dart';
+import '../../helpers/theme_helper.dart';
+import '../../widgets/custom_image_view.dart';
+import '../../../modules/auth/services/firebase_auth_services.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -20,7 +20,7 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  final auth = Modular.get<AuthService>();
+  final auth = Modular.get<FirebaseAuthService>();
   startTimeout() {
     return Timer(const Duration(seconds: 5), verificationAuth);
   }
@@ -28,9 +28,9 @@ class _SplashPageState extends State<SplashPage> {
 
   verificationAuth() async {
     if (auth.usuario == null) {
-      Modular.to.pushReplacementNamed('/login');
+      Modular.to.pushReplacementNamed('/auth/login');
     } else {
-      Modular.to.pushReplacementNamed('/home');
+      Modular.to.pushReplacementNamed('/weather/home');
     }
   }
 
