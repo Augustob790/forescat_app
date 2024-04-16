@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import '../domain/models/user_model.dart';
 
 class AuthException implements Exception {
   String message;
@@ -12,6 +13,7 @@ class FirebaseAuthService {
   FirebaseFirestore fire = FirebaseFirestore.instance;
 
   User? usuario;
+  User? usuarioFire;
   bool isLoading = true;
 
   FirebaseAuthService() {
@@ -21,7 +23,7 @@ class FirebaseAuthService {
   addUserDetails(String email, String senha) async {
     await fire.collection("users").add({
       "email": email,
-      "senha": senha,    
+      "senha": senha,
     });
   }
 
@@ -36,6 +38,11 @@ class FirebaseAuthService {
     usuario = auth.currentUser;
   }
 
+  Future<UserModel> getUserFire() async {
+    DocumentSnapshot snap =  await fire.collection("users").doc(usuario?.uid).get();
+    return UserModel.userData(snap);
+  }
+
   signInWithGoogle() async {
     final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
     final GoogleSignInAuthentication gAuth = await gUser!.authentication;
@@ -48,11 +55,17 @@ class FirebaseAuthService {
     return await auth.signInWithCredential(credential);
   }
 
-  registrar(String email, String senha) async {
+  registrar(String email, String senha, String image) async {
     try {
-      await auth.createUserWithEmailAndPassword(email: email, password: senha);
+      final response = await auth.createUserWithEmailAndPassword(email: email, password: senha);
       getUser();
-      addUserDetails(email, senha);
+      UserModel user = UserModel(
+        email: email,
+        uid: response.user!.uid,
+        photoImage: image,
+      );
+
+      await fire.collection("users").doc(response.user!.uid).set(user.toJson());
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         throw AuthException('A senha é muito fraca!');

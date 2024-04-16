@@ -173,8 +173,7 @@ class _SignPageViewState extends State<SignPageView> {
                     child: CustomButtonStandard(
                         onTap: () {
                           if (auth.signFormKey.currentState!.validate()) {
-                            auth.registrar(auth.emailController.text,
-                                auth.passwordController.text);
+                            auth.registrar(auth.emailController.text,auth.passwordController.text, "");
                           }
                         },
                         color: const Color(0xFF947CCD),

@@ -5,6 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:forecast_app/modules/auth/services/firebase_auth_services.dart';
 import '../../../../core/const/image_constant.dart';
+import '../../../../core/notifications/notifications_manager.dart';
 import 'widget/custom_container.dart';
 import '../../../../core/widgets/custom_text.dart';
 import '../../../../core/widgets/get_error_ui.dart';
@@ -46,12 +47,9 @@ class _HomePageViewState extends State<HomePageView> {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              begin: const Alignment(0.5,0.5),
+              begin: const Alignment(0.5, 0.5),
               end: const Alignment(0.5, 2.5),
-              colors: [
-                appTheme.indigo900,
-                appTheme.blueGray700
-              ],
+              colors: [appTheme.indigo900, appTheme.blueGray700],
             ),
           ),
         ),
@@ -78,7 +76,8 @@ class _HomePageViewState extends State<HomePageView> {
         actions: [
           IconButton(
             onPressed: () {
-              inicialize();
+            //  inicialize();
+              NotificationsManager().simpleNotification();
             },
             padding: const EdgeInsets.all(0),
             icon: const SizedBox(

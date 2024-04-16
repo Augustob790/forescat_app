@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 
+import '../domain/models/user_model.dart';
 import '../services/firebase_auth_services.dart';
 
 part "auth_store.g.dart";
@@ -23,6 +24,9 @@ abstract class _AuthStore with Store {
 
   @observable
   dynamic isLoading;
+
+  @observable
+  UserModel? userModel;
 
   @action
   logout() async {
@@ -61,12 +65,23 @@ abstract class _AuthStore with Store {
   }
 
   @action
-  Future<void> registrar(String email, String senha) async {
+  Future<void> registrar(String email, String senha, String image) async {
     isLoading = "isLoading";
     try {
-      await auth.registrar(email, senha);
-
+      await auth.registrar(email, senha, image);
       Modular.to.pushReplacementNamed('/weather/home');
+      isLoading = "sucess";
+    } catch (e) {
+      isLoading = "error";
+      throw e.toString();
+    }
+  }
+
+  @action
+  Future<void> getUserFire() async {
+    isLoading = "isLoading";
+    try {
+      userModel = await auth.getUserFire();
       isLoading = "sucess";
     } catch (e) {
       isLoading = "error";

@@ -57,6 +57,22 @@ mixin _$AuthStore on _AuthStore, Store {
     });
   }
 
+  late final _$userModelAtom =
+      Atom(name: '_AuthStore.userModel', context: context);
+
+  @override
+  UserModel? get userModel {
+    _$userModelAtom.reportRead();
+    return super.userModel;
+  }
+
+  @override
+  set userModel(UserModel? value) {
+    _$userModelAtom.reportWrite(value, super.userModel, () {
+      super.userModel = value;
+    });
+  }
+
   late final _$logoutAsyncAction =
       AsyncAction('_AuthStore.logout', context: context);
 
@@ -93,8 +109,17 @@ mixin _$AuthStore on _AuthStore, Store {
       AsyncAction('_AuthStore.registrar', context: context);
 
   @override
-  Future<void> registrar(String email, String senha) {
-    return _$registrarAsyncAction.run(() => super.registrar(email, senha));
+  Future<void> registrar(String email, String senha, String image) {
+    return _$registrarAsyncAction
+        .run(() => super.registrar(email, senha, image));
+  }
+
+  late final _$getUserFireAsyncAction =
+      AsyncAction('_AuthStore.getUserFire', context: context);
+
+  @override
+  Future<void> getUserFire() {
+    return _$getUserFireAsyncAction.run(() => super.getUserFire());
   }
 
   @override
@@ -102,7 +127,8 @@ mixin _$AuthStore on _AuthStore, Store {
     return '''
 emailController: ${emailController},
 passwordController: ${passwordController},
-isLoading: ${isLoading}
+isLoading: ${isLoading},
+userModel: ${userModel}
     ''';
   }
 }
