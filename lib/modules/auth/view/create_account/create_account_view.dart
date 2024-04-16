@@ -1,5 +1,7 @@
-// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously, unnecessary_nullable_for_final_variable_declarations
+import 'dart:ffi';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -27,10 +29,19 @@ class _SignPageViewState extends State<SignPageView> {
 
   final FirebaseStorage storage = FirebaseStorage.instance;
 
-  Future<XFile?> getImage() async {
+  pickImage(ImageSource source) async {
     final ImagePicker picker = ImagePicker();
     XFile? image = await picker.pickImage(source: ImageSource.gallery);
-    return image;
+    if (image != null) {
+      return image.readAsBytes();
+    }
+  }
+
+  selectImage() async {
+    Uint8List img = await pickImage(ImageSource.gallery);
+    setState(() {
+      auth.images = img;
+    });
   }
 
   Future<void> upload(String path) async {
@@ -43,6 +54,12 @@ class _SignPageViewState extends State<SignPageView> {
     }
   }
 
+  Future<XFile?> getImage() async {
+    final ImagePicker picker = ImagePicker();
+    XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    return image;
+  }
+
   pickUploadImage() async {
     XFile? file = await getImage();
     if (file != null) {
@@ -52,7 +69,7 @@ class _SignPageViewState extends State<SignPageView> {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       extendBody: true,
       extendBodyBehindAppBar: true,
@@ -107,11 +124,28 @@ class _SignPageViewState extends State<SignPageView> {
                 bottom: 10,
               ),
               alignment: Alignment.center,
-              child: CustomImageView(
-                imagePath: Helpers.imageClima("Clear"),
-                height: 122,
-                width: 130,
-              ),
+              child: Stack(children: [
+                auth.images != null
+                    ? CircleAvatar(
+                        radius: 64,
+                        backgroundImage: MemoryImage(auth.images!),
+                      )
+                    : const CircleAvatar(
+                        radius: 64,
+                        backgroundImage: NetworkImage(
+                            'https://www.pngitem.com/pimgs/m/421-4212266_transparent-default-avatar-png-default-avatar-images-png.png'),
+                      ),
+                Positioned(
+                    bottom: -10,
+                    left: 80,
+                    child: IconButton(
+                      color: Colors.black,
+                      icon: const Icon(Icons.add_a_photo),
+                      onPressed: () {
+                        selectImage();
+                      },
+                    ))
+              ]),
             ),
             Form(
               key: auth.signFormKey,
@@ -173,7 +207,8 @@ class _SignPageViewState extends State<SignPageView> {
                     child: CustomButtonStandard(
                         onTap: () {
                           if (auth.signFormKey.currentState!.validate()) {
-                            auth.registrar(auth.emailController.text,auth.passwordController.text, "");
+                            auth.registrar(auth.emailController.text,
+                                auth.passwordController.text, auth.images!, "");
                           }
                         },
                         color: const Color(0xFF947CCD),

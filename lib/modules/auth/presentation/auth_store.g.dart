@@ -73,6 +73,21 @@ mixin _$AuthStore on _AuthStore, Store {
     });
   }
 
+  late final _$imagesAtom = Atom(name: '_AuthStore.images', context: context);
+
+  @override
+  Uint8List? get images {
+    _$imagesAtom.reportRead();
+    return super.images;
+  }
+
+  @override
+  set images(Uint8List? value) {
+    _$imagesAtom.reportWrite(value, super.images, () {
+      super.images = value;
+    });
+  }
+
   late final _$logoutAsyncAction =
       AsyncAction('_AuthStore.logout', context: context);
 
@@ -109,9 +124,10 @@ mixin _$AuthStore on _AuthStore, Store {
       AsyncAction('_AuthStore.registrar', context: context);
 
   @override
-  Future<void> registrar(String email, String senha, String image) {
+  Future<void> registrar(
+      String email, String senha, Uint8List file, String image) {
     return _$registrarAsyncAction
-        .run(() => super.registrar(email, senha, image));
+        .run(() => super.registrar(email, senha, file, image));
   }
 
   late final _$getUserFireAsyncAction =
@@ -128,7 +144,8 @@ mixin _$AuthStore on _AuthStore, Store {
 emailController: ${emailController},
 passwordController: ${passwordController},
 isLoading: ${isLoading},
-userModel: ${userModel}
+userModel: ${userModel},
+images: ${images}
     ''';
   }
 }

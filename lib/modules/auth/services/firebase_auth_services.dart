@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../domain/models/user_model.dart';
 
@@ -11,6 +14,7 @@ class AuthException implements Exception {
 class FirebaseAuthService {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore fire = FirebaseFirestore.instance;
+  FirebaseStorage storage = FirebaseStorage.instance;
 
   User? usuario;
   User? usuarioFire;
@@ -38,9 +42,23 @@ class FirebaseAuthService {
     usuario = auth.currentUser;
   }
 
+//levar usuario para a home page;
   Future<UserModel> getUserFire() async {
-    DocumentSnapshot snap =  await fire.collection("users").doc(usuario?.uid).get();
+    DocumentSnapshot snap =
+        await fire.collection("users").doc(usuario?.uid).get();
     return UserModel.userData(snap);
+  }
+
+  Future<String> uploadImage(String path, Uint8List file) async {
+    try {
+      Reference ref = storage.ref().child(path);
+      UploadTask task = ref.putData(file);
+      TaskSnapshot snapshot = await task;
+      String download = await snapshot.ref.getDownloadURL();
+      return download;
+    } on FirebaseException catch (e) {
+      throw Exception("Erro no upload: ${e.code}");
+    }
   }
 
   signInWithGoogle() async {
@@ -55,10 +73,12 @@ class FirebaseAuthService {
     return await auth.signInWithCredential(credential);
   }
 
-  registrar(String email, String senha, String image) async {
+  registrar(String email, String senha, Uint8List file, String image) async {
     try {
-      final response = await auth.createUserWithEmailAndPassword(email: email, password: senha);
+      final response = await auth.createUserWithEmailAndPassword(
+          email: email, password: senha);
       getUser();
+      image = await uploadImage("profileImage", file);
       UserModel user = UserModel(
         email: email,
         uid: response.user!.uid,

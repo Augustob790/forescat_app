@@ -76,8 +76,9 @@ class _HomePageViewState extends State<HomePageView> {
         actions: [
           IconButton(
             onPressed: () {
-            //  inicialize();
+              //  inicialize();
               NotificationsManager().simpleNotification();
+              
             },
             padding: const EdgeInsets.all(0),
             icon: const SizedBox(
@@ -142,6 +143,13 @@ class _HomePageViewState extends State<HomePageView> {
                 weatherStore.weather?.list.first.weather.first.main ?? "Clear"),
             height: 120,
             width: 130,
+          ),
+          CustomText(
+            text: auth.usuarioFire?.email ?? "",
+            fontSize: 18.35,
+            height: 0.08,
+            color: Colors.black,
+            fontWeight: FontWeight.w600,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

@@ -1,5 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
@@ -27,6 +29,9 @@ abstract class _AuthStore with Store {
 
   @observable
   UserModel? userModel;
+
+  @observable
+  Uint8List? images;
 
   @action
   logout() async {
@@ -65,10 +70,10 @@ abstract class _AuthStore with Store {
   }
 
   @action
-  Future<void> registrar(String email, String senha, String image) async {
+  Future<void> registrar(String email, String senha, Uint8List file, String image) async {
     isLoading = "isLoading";
     try {
-      await auth.registrar(email, senha, image);
+      await auth.registrar(email, senha, images!, "");
       Modular.to.pushReplacementNamed('/weather/home');
       isLoading = "sucess";
     } catch (e) {
