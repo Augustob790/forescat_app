@@ -117,7 +117,7 @@ class _HomePageViewState extends State<HomePageView> {
                   Text(
                     widget.authStore.userModel?.email == null
                         ? service.usuario?.email ?? ""
-                        : "",
+                        : widget.authStore.userModel?.email ?? "",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 15,
@@ -138,7 +138,7 @@ class _HomePageViewState extends State<HomePageView> {
               ),
               title: Text('Sair'),
               onTap: () {
-                // Implemente a ação de sair
+                widget.authStore.logout();
               },
             ),
           ],
@@ -195,13 +195,6 @@ class _HomePageViewState extends State<HomePageView> {
                     "Clear"),
             height: 120,
             width: 130,
-          ),
-          CustomText(
-            text: widget.authStore.userModel?.email ?? "",
-            fontSize: 18.35,
-            height: 0.08,
-            color: Colors.black,
-            fontWeight: FontWeight.w600,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
