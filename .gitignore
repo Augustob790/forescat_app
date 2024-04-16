@@ -42,4 +42,4 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 **/ios/GoogleService-Info.plist
-**/android/src/GoogleService-Info.plist
+**/android/app/GoogleService-Info.plist
