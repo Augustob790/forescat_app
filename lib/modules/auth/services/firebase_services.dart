@@ -67,7 +67,7 @@ class FirebaseAuthService {
     return await auth.signInWithCredential(credential);
   }
 
-  registrar(String email, String senha, Uint8List file, String image) async {
+  Future<void>registrar(String email, String senha, Uint8List file, String image) async {
     try {
       final response = await auth.createUserWithEmailAndPassword(
           email: email, password: senha);
@@ -89,7 +89,7 @@ class FirebaseAuthService {
     }
   }
 
-  login(String email, String senha) async {
+  Future<void> login(String email, String senha) async {
     try {
       await auth.signInWithEmailAndPassword(email: email, password: senha);
       getUser();
