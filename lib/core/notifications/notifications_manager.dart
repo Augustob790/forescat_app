@@ -2,15 +2,12 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 
 class NotificationsManager {
-  FlutterLocalNotificationsPlugin notificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+  FlutterLocalNotificationsPlugin notificationsPlugin = FlutterLocalNotificationsPlugin();
 
   Future<void> initNotification() async {
-    AndroidInitializationSettings initializationSettingsAndroid =
-        const AndroidInitializationSettings('@mipmap/ic_launcher');
+    AndroidInitializationSettings initializationSettingsAndroid = const AndroidInitializationSettings('@mipmap/sol');
 
-    DarwinInitializationSettings initializationSettingsiOS =
-        DarwinInitializationSettings(
+    DarwinInitializationSettings initializationSettingsiOS = DarwinInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
       requestSoundPermission: true,
@@ -22,8 +19,7 @@ class NotificationsManager {
       iOS: initializationSettingsiOS,
     );
 
-    await notificationsPlugin.initialize(initializationSettings,
-        onDidReceiveNotificationResponse: (details) async {});
+    await notificationsPlugin.initialize(initializationSettings,onDidReceiveNotificationResponse: (details) async {});
   }
 
   notificationsDetails() {

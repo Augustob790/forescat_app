@@ -2,6 +2,8 @@
 
 import 'dart:developer';
 import 'package:mobx/mobx.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/notifications/notifications_manager.dart';
 import '../../domain/model/weather_forecast_model.dart';
 import '../../domain/usecases/get_all_weather_use_cases.dart';
 import '../../domain/usecases/get_city_use_cases.dart';
@@ -54,12 +56,24 @@ abstract class _WeatherStoreBase with Store {
   }
 
   @action
+  void checkWeatherForecastUpdates() async {
+    final preferences = await SharedPreferences.getInstance();
+    final String? storedWeather = preferences.getString('storedWeather');
+    final String newWeather = weather!.list.first.main.temp.toString();
+    if (storedWeather != newWeather) {
+      NotificationsManager().showNotification(title: "Atualização", body: "Houve mudanças no clima/tempo!");
+      await preferences.setString('storedWeather', newWeather);
+    }
+  }
+
+  @action
   Future<WeatherForecast> getCityWeather(String cityName) async {
     isLoading = "isLoading";
     try {
       final response = await getCityWeatherUsecase(cityName);
       isLoading = "sucess";
       weather = response;
+      checkWeatherForecastUpdates();
       return weather!;
     } catch (e) {
       isLoading = "error";

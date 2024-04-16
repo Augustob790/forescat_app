@@ -5,6 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:forecast_app/modules/weather/view/home/widget/custom_appbar.dart';
 import '../../../../core/const/image_constant.dart';
+import '../../../../core/notifications/notifications_manager.dart';
 import '../../../../core/widgets/get_error_ui.dart';
 import '../../../../core/widgets/load_ui.dart';
 import '../../../auth/presentation/auth_store.dart';
@@ -43,6 +44,7 @@ class _HomePageViewState extends State<HomePageView> {
     await widget.weatherStore.getCurrentCity();
     await widget.weatherStore.getCityWeather(widget.weatherStore.city);
     await widget.weatherStore.getAllWeather(widget.weatherStore.city);
+    NotificationsManager().showNotification(title: "Atualização", body: "Previsão do tempo atualizada!");
   }
 
   @override
@@ -50,7 +52,7 @@ class _HomePageViewState extends State<HomePageView> {
     return Scaffold(
       appBar: CustomAppBar(
         weatherStore: widget.weatherStore,
-        onPressed: () {
+        onPressed: () async {
           inicialize();
         },
       ),
@@ -65,8 +67,7 @@ class _HomePageViewState extends State<HomePageView> {
               return const LoadUi();
             } else if (widget.weatherStore.errorMessage == "error") {
               return const GetErrorUi(error: "Error");
-            } else if (widget.weatherStore.weather != null &&
-                widget.weatherStore.isLoading == "sucess") {
+            } else if (widget.weatherStore.weather != null && widget.weatherStore.isLoading == "sucess") {
               return getBodyUI();
             } else {
               return const LoadUi();
