@@ -137,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                             }
                           },
                           color: const Color(0xFF947CCD),
-                          isLoading: true,
+                          isLoading: widget.authStore.isLoading == "isLoading" ? false : true,
                           text: "Sign In",
                           height: 40,
                           width: size.width / 1.15,

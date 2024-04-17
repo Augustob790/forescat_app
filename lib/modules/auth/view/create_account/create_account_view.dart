@@ -187,7 +187,7 @@ class _SignPageViewState extends State<SignPageView> {
                               }
                             },
                             color: const Color(0xFF947CCD),
-                            isLoading: true,
+                            isLoading: widget.authStore.isLoading == "isLoading" ? false : true,
                             text: "Sign Up",
                             height: 40,
                             width: size.width / 1.15),
