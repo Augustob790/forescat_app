@@ -64,7 +64,7 @@ The project was developed with the technologies below:
 
 1. Create a Firebase account or log in with an existing account
 
-2. Configure Firebase in the app and enable Firebase authentication, Firebase storage, Firebase Firestore with their appropriate permissions.
+2. Configure Firebase in the app and enable Firebase Authentication, Firebase Storage, Firebase Firestore with their appropriate permissions.
    
 3. Create a openweathermap account or log in with an existing account link: https://openweathermap.org/
 
