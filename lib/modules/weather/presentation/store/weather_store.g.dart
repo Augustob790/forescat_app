@@ -97,6 +97,16 @@ mixin _$WeatherStore on _WeatherStoreBase, Store {
     return _$getAllWeatherAsyncAction.run(() => super.getAllWeather(cityName));
   }
 
+  late final _$checkWeatherForecastUpdatesAsyncAction = AsyncAction(
+      '_WeatherStoreBase.checkWeatherForecastUpdates',
+      context: context);
+
+  @override
+  Future checkWeatherForecastUpdates() {
+    return _$checkWeatherForecastUpdatesAsyncAction
+        .run(() => super.checkWeatherForecastUpdates());
+  }
+
   late final _$getCityWeatherAsyncAction =
       AsyncAction('_WeatherStoreBase.getCityWeather', context: context);
 

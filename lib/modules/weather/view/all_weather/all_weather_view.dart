@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../../../core/const/image_constant.dart';
 import '../../../../core/helpers/helpers.dart';
 import '../../../../core/helpers/theme_helper.dart';
+import '../../../../core/notifications/notifications_manager.dart';
 import '../../../../core/widgets/get_error_ui.dart';
 import '../../../../core/widgets/load_ui.dart';
 import 'widgets/custom_appbar.dart';
@@ -25,12 +26,19 @@ class AllWeatherView extends StatefulWidget {
 }
 
 class _AllWeatherViewState extends State<AllWeatherView> {
+
+  refresh() async {
+    await widget.weatherStore.getCurrentCity();
+    await widget.weatherStore.getAllWeather(widget.weatherStore.city);
+    NotificationsManager().showNotification(title: "Atualização", body: "Previsão do tempo atualizada!");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBarAll(
         onPressed: () async {
-          widget.weatherStore.refresh();
+          refresh();
         },
       ),
       body: Observer(
