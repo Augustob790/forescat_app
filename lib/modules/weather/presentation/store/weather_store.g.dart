@@ -41,19 +41,19 @@ mixin _$WeatherStore on _WeatherStoreBase, Store {
     });
   }
 
-  late final _$cityNameAtom =
-      Atom(name: '_WeatherStoreBase.cityName', context: context);
+  late final _$positionAtom =
+      Atom(name: '_WeatherStoreBase.position', context: context);
 
   @override
-  String? get cityName {
-    _$cityNameAtom.reportRead();
-    return super.cityName;
+  Position? get position {
+    _$positionAtom.reportRead();
+    return super.position;
   }
 
   @override
-  set cityName(String? value) {
-    _$cityNameAtom.reportWrite(value, super.cityName, () {
-      super.cityName = value;
+  set position(Position? value) {
+    _$positionAtom.reportWrite(value, super.position, () {
+      super.position = value;
     });
   }
 
@@ -93,8 +93,8 @@ mixin _$WeatherStore on _WeatherStoreBase, Store {
       AsyncAction('_WeatherStoreBase.getAllWeather', context: context);
 
   @override
-  Future<WeatherForecast> getAllWeather(String cityName) {
-    return _$getAllWeatherAsyncAction.run(() => super.getAllWeather(cityName));
+  Future<WeatherForecast> getAllWeather(Position position) {
+    return _$getAllWeatherAsyncAction.run(() => super.getAllWeather(position));
   }
 
   late final _$checkWeatherForecastUpdatesAsyncAction = AsyncAction(
@@ -111,17 +111,17 @@ mixin _$WeatherStore on _WeatherStoreBase, Store {
       AsyncAction('_WeatherStoreBase.getCityWeather', context: context);
 
   @override
-  Future<WeatherForecast> getCityWeather(String cityName) {
+  Future<WeatherForecast> getCityWeather(Position position) {
     return _$getCityWeatherAsyncAction
-        .run(() => super.getCityWeather(cityName));
+        .run(() => super.getCityWeather(position));
   }
 
-  late final _$getCurrentCityAsyncAction =
-      AsyncAction('_WeatherStoreBase.getCurrentCity', context: context);
+  late final _$getPositionAsyncAction =
+      AsyncAction('_WeatherStoreBase.getPosition', context: context);
 
   @override
-  Future<String> getCurrentCity() {
-    return _$getCurrentCityAsyncAction.run(() => super.getCurrentCity());
+  Future<Position> getPosition() {
+    return _$getPositionAsyncAction.run(() => super.getPosition());
   }
 
   @override
@@ -129,7 +129,7 @@ mixin _$WeatherStore on _WeatherStoreBase, Store {
     return '''
 forecast: ${forecast},
 weather: ${weather},
-cityName: ${cityName},
+position: ${position},
 errorMessage: ${errorMessage},
 isLoading: ${isLoading}
     ''';

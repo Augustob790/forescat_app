@@ -1,8 +1,9 @@
+import 'package:geolocator/geolocator.dart';
+
 import '../../data/repositories/weather_repository.dart';
-import '../exception/weather_exception.dart';
 
 abstract class GetCurrentCityUsecase {
-  Future<String> call();
+  Future<Position> call();
 }
 
 class GetCurrentCityUsecaseImpl implements GetCurrentCityUsecase {
@@ -11,13 +12,22 @@ class GetCurrentCityUsecaseImpl implements GetCurrentCityUsecase {
   GetCurrentCityUsecaseImpl({required this.repository});
 
   @override
-  Future<String> call() async {
+  Future<Position> call() async {
     try {
-      return repository.getCity();
-    } on WeatherException {
-      rethrow;
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.unableToDetermine) {
+        permission = await Geolocator.requestPermission();
+      }
+
+      if (permission != LocationPermission.always &&
+          permission != LocationPermission.whileInUse) {
+        throw "Permissão não concedida!";
+      }
+
+      return repository.getPosition();
+    } catch (e) {
+      throw e.toString();
     }
   }
 }
-
-

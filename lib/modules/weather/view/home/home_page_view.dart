@@ -41,14 +41,15 @@ class _HomePageViewState extends State<HomePageView> {
   }
 
   inicialize() async {
-    await widget.weatherStore.getCurrentCity();
-    await widget.weatherStore.getCityWeather(widget.weatherStore.city);
-    await widget.weatherStore.getAllWeather(widget.weatherStore.city);
+    await widget.weatherStore.getPosition();
+    await widget.weatherStore.getCityWeather(widget.weatherStore.position!);
+    await widget.weatherStore.getAllWeather(widget.weatherStore.position!);
   }
 
   refresh() async {
     await inicialize();
-    NotificationsManager().showNotification(title: "Atualização", body: "Previsão do tempo atualizada!");
+    NotificationsManager().showNotification(
+        title: "Atualização", body: "Previsão do tempo atualizada!");
   }
 
   @override
@@ -69,13 +70,11 @@ class _HomePageViewState extends State<HomePageView> {
           builder: (context) {
             if (widget.weatherStore.isLoading == "isLoading") {
               return const LoadUi();
-            } else if (widget.weatherStore.errorMessage == "error") {
-              return const GetErrorUi(error: "Error");
-            } else if (widget.weatherStore.weather != null &&
+            }else if (widget.weatherStore.weather != null &&
                 widget.weatherStore.isLoading == "sucess") {
               return getBodyUI();
             } else {
-              return const LoadUi();
+              return GetErrorUi(error: widget.weatherStore.errorMessage);
             }
           },
         ),

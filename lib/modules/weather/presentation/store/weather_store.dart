@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'dart:developer';
+import 'package:geolocator/geolocator.dart';
 import 'package:mobx/mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/notifications/notifications_manager.dart';
@@ -24,7 +25,6 @@ abstract class _WeatherStoreBase with Store {
     required this.getCurrentCityUsecase,
   });
 
-  String city = "";
 
   @observable
   WeatherForecast? forecast;
@@ -33,7 +33,7 @@ abstract class _WeatherStoreBase with Store {
   WeatherForecast? weather;
 
   @observable
-  String? cityName;
+  Position? position;
 
   @observable
   dynamic errorMessage;
@@ -42,10 +42,10 @@ abstract class _WeatherStoreBase with Store {
   dynamic isLoading;
 
   @action
-  Future<WeatherForecast> getAllWeather(String cityName) async {
+  Future<WeatherForecast> getAllWeather(Position position) async {
     isLoading = "isLoading";
     try {
-      final response = await getAllWeatherUsecase(cityName);
+      final response = await getAllWeatherUsecase(position);
       forecast = response;
       isLoading = "sucess";
       return forecast!;
@@ -61,16 +61,17 @@ abstract class _WeatherStoreBase with Store {
     final String? storedWeather = preferences.getString('storedWeathers');
     final String newWeather = weather!.list.first.main.temp.toString();
     if (storedWeather != newWeather) {
-      NotificationsManager().showNotification(title: "Atualização", body: "Houve mudanças no clima/tempo!");
+      NotificationsManager().showNotification(
+          title: "Atualização", body: "Houve mudanças no clima/tempo!");
       await preferences.setString('storedWeather', newWeather);
     }
   }
 
   @action
-  Future<WeatherForecast> getCityWeather(String cityName) async {
+  Future<WeatherForecast> getCityWeather(Position position) async {
     isLoading = "isLoading";
     try {
-      final response = await getCityWeatherUsecase(cityName);
+      final response = await getCityWeatherUsecase(position);
       isLoading = "sucess";
       weather = response;
       checkWeatherForecastUpdates();
@@ -84,12 +85,16 @@ abstract class _WeatherStoreBase with Store {
   }
 
   @action
-  Future<String> getCurrentCity() async {
+  Future<Position> getPosition() async {
+    isLoading = "isLoading";
     try {
       final response = await getCurrentCityUsecase();
-      city = response;
-      return city;
+      isLoading = "sucess";
+      position = response;
+      return position!;
     } catch (e) {
+      isLoading = "error";
+      errorMessage = e.toString();
       log(e.toString());
       throw "$e";
     }

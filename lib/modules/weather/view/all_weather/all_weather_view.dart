@@ -28,12 +28,13 @@ class AllWeatherView extends StatefulWidget {
 class _AllWeatherViewState extends State<AllWeatherView> {
 
   refresh() async {
-    await widget.weatherStore.getCurrentCity();
-    await widget.weatherStore.getAllWeather(widget.weatherStore.city);
+    await widget.weatherStore.getPosition();
+    await widget.weatherStore.getCityWeather(widget.weatherStore.position!);
+    await widget.weatherStore.getAllWeather(widget.weatherStore.position!);
     NotificationsManager().showNotification(title: "Atualização", body: "Previsão do tempo atualizada!");
   }
 
-  @override
+  @override   
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBarAll(
@@ -42,19 +43,17 @@ class _AllWeatherViewState extends State<AllWeatherView> {
         },
       ),
       body: Observer(
-        builder: (context) {
-          if (widget.weatherStore.isLoading == "isLoading") {
-            return const LoadUi();
-          } else if (widget.weatherStore.errorMessage == "error") {
-            return const GetErrorUi(error: "Error");
-          } else if (widget.weatherStore.weather != null &&
-              widget.weatherStore.isLoading == "sucess") {
-            return getBodyUI();
-          } else {
-            return const LoadUi();
-          }
-        },
-      ),
+          builder: (context) {
+            if (widget.weatherStore.isLoading == "isLoading") {
+              return const LoadUi();
+            }else if (widget.weatherStore.weather != null &&
+                widget.weatherStore.isLoading == "sucess") {
+              return getBodyUI();
+            } else {
+              return GetErrorUi(error: widget.weatherStore.errorMessage);
+            }
+          },
+        ),
     );
   }
 

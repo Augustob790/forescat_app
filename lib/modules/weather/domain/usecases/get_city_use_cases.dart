@@ -1,9 +1,11 @@
+import 'package:geolocator/geolocator.dart';
+
 import '../../data/repositories/weather_repository.dart';
 import '../exception/weather_exception.dart';
 import '../model/weather_forecast_model.dart';
 
 abstract class GetCityWeatherUsecase {
-  Future<WeatherForecast> call(String cityname);
+  Future<WeatherForecast> call(Position position);
 }
 
 class GetCityWeatherUsecaseImpl implements GetCityWeatherUsecase {
@@ -12,9 +14,9 @@ class GetCityWeatherUsecaseImpl implements GetCityWeatherUsecase {
   GetCityWeatherUsecaseImpl({required this.repository});
 
   @override
-  Future<WeatherForecast> call(cityName) async {
+  Future<WeatherForecast> call(Position position) async {
     try {
-      return repository.getCityWeather(cityName);
+      return repository.getCityWeather(position);
     } on WeatherException {
       rethrow;
     }

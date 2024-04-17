@@ -1,14 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import '../../../../core/const/api.dart';
 import '../../domain/model/weather_forecast_model.dart';
 
 abstract class WeatherRepository {
-  Future<WeatherForecast> getCityWeather(String cityName);
-  Future<WeatherForecast> getAllWeather(String cityName);
-  Future<String> getCity();
+  Future<WeatherForecast> getCityWeather(Position position);
+  Future<WeatherForecast> getAllWeather(Position position);
+  Future<Position> getPosition();
 }
 
 class WeatherRepositoryImpl implements WeatherRepository {
@@ -16,8 +15,8 @@ class WeatherRepositoryImpl implements WeatherRepository {
   static String apiKey = dotenv.get('apiKey');
 
   @override
-  Future<WeatherForecast> getAllWeather(String cityName) async {
-    String url = "forecast?q=$cityName&appid=$apiKey&units=metric";
+  Future<WeatherForecast> getAllWeather(Position position) async {
+    String url = "forecast?lat=${position.latitude}&lon=${position.longitude}&appid=$apiKey&units=metric";
     try {
       final response = await dio.get(url);
       return WeatherForecast.fromJson(response.data);
@@ -36,8 +35,8 @@ class WeatherRepositoryImpl implements WeatherRepository {
   }
 
   @override
-  Future<WeatherForecast> getCityWeather(String cityName) async {
-    String url = "forecast?q=$cityName&appid=$apiKey&units=metric&cnt=1";
+  Future<WeatherForecast> getCityWeather(Position position) async {
+    String url = "forecast?lat=${position.latitude}&lon=${position.longitude}&appid=$apiKey&units=metric&cnt=1";
     try {
       final response = await dio.get(url);
       return WeatherForecast.fromJson(response.data);
@@ -56,18 +55,12 @@ class WeatherRepositoryImpl implements WeatherRepository {
   }
 
   @override
-  Future<String> getCity() async {
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
+  Future<Position> getPosition() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      return position;
+    } catch (e) {
+      throw e.toString();
     }
-
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
-    String? city = placemarks[0].locality;
-    return city ?? "";
   }
 }
