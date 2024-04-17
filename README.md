@@ -24,7 +24,7 @@
 
 ## About
 
-<strong>To Do:</strong> App for forecast weather
+App for forecast weather
 
 <a id="application"></a>
 
